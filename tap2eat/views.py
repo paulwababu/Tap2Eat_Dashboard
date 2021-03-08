@@ -1,12 +1,9 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login
 from django.http import HttpResponse, HttpResponseRedirect
 import requests
 import json
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
 import requests
 import json
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -18,11 +15,9 @@ from django.urls import reverse
 from django.core.files.storage import FileSystemStorage
 from itertools import chain
 from django.http import HttpResponse, HttpResponseRedirect
-from django.contrib.auth.models import User
 import csv
 
-access_token = ""
-pageNumber = "1"
+
 completedCorrect = ""
 completedCorrects = ""
 completedCorrectss = ""
@@ -65,24 +60,18 @@ cmmmm = ""
 furahiday = ""
 friesday = ""
 furahia = ""
-#global furahiday, furahia, friesday
-#global completedWedo, completedWeddo, completedWedddo
 thurahiday = ""
 thurahia = ""
 thriesday = ""
-#global completedWebo, completedWebbo, completedWebbbo
 completedWEBO = ""
 completedWEBBO = ""
-completedWEBBBO = ""
-#global completedWebDo, completedWebbDo, completedWebbbDo        
+completedWEBBBO = ""       
 completedWEBDO = ""
 completedWEBBDO = ""
 completedWEBBBDO = ""
-#global cWEBDO, cWEBBDO, cWEBBBDO
 cWEBBBDO = ""
 cWEBDO = ""
 cWEBBDO = ""
-#global completedWEBO, completedWEBBO, completedWEBBBO
 mmm = ""
 mm = ""
 m = ""
@@ -140,8 +129,8 @@ def login(request):
             request.session['user'] = username
             token = response.json()
             access = token['content']
-            global access_token
             access_token = access['token']
+            request.session['access_token'] = access_token
             return redirect('home')
         #return render(request, 'signin.html')
     return render(request, 'signin.html')           
@@ -149,18 +138,16 @@ def login(request):
 def home(request):
     #currentDayTapsDate = '?startDate='+ startDate +'_00:00&endDate='+ endDate +'_23:59'
     summary = 'https://tap2eat.co.ke/pilot/api/v1/report/summary'
-    response2 = requests.get(summary, headers={'Authorization': f'Bearer {access_token}'})
+    token = request.session['access_token']
+    response2 = requests.get(summary, headers={'Authorization': f'Bearer {token}'})
     #print(response2.json())
     paymentsApi = 'https://tap2eat.co.ke/pilot/api/v1/payments'
     info = '?pgSize=40&pgNum=0&sortOrder=asc'
-    response3 = requests.get(paymentsApi + info, headers={'Authorization': f'Bearer {access_token}'})
-    #print(response3.status_code)
-    #print(response2.status_code)
+    response3 = requests.get(paymentsApi + info, headers={'Authorization': f'Bearer {token}'})
     if response2.status_code == 200 and 'user' in request.session:
         if response3.status_code == 200 and 'user' in request.session:
             current_user = request.session['user']
             data5 = response2.json()
-            ##print(data5)
             todoss = data5['content']
             usera =  todoss.get('devices', 0)
             ##print(usera)
@@ -191,7 +178,7 @@ def home(request):
             ##################### PENETRATION RATE #####################################################
 
             ######################TOTAL STUDENTS IN ENTITY########################################################
-            responsible = requests.get('https://tap2eat.co.ke/pilot/api/v1/operational-entity/1', headers={'Authorization': f'Bearer {access_token}'})
+            responsible = requests.get('https://tap2eat.co.ke/pilot/api/v1/operational-entity/1', headers={'Authorization': f'Bearer {token}'})
             contentt = responsible.json()
             dataNeeded = contentt['content']
             ##print(dataNeeded)
@@ -261,7 +248,7 @@ def home(request):
             ##print("StartDate: ", startDate)
             ##print("EndDate: ", endDate)
             currentDayTapsDate = '?startDate='+ startDate +'_00:00&endDate='+ endDate +'_23:59'
-            currentDayTaps = requests.get(summary + currentDayTapsDate, headers={'Authorization': f'Bearer {access_token}'})
+            currentDayTaps = requests.get(summary + currentDayTapsDate, headers={'Authorization': f'Bearer {token}'})
             ##print(currentDayTapsDate)
             rawData = currentDayTaps.json()
             #Now get the successful meal taps for previous day
@@ -302,7 +289,7 @@ def home(request):
                 endDateMon = str(day.date())
                 reqForMonFormat = '?startDate='+ startDateMon + '_00:00&endDate=' + endDateMon + '_23:59'
                 ##print(reqForMonFormat)
-                requestMM = requests.get(summary + reqForMonFormat, headers={'Authorization': f'Bearer {access_token}'})
+                requestMM = requests.get(summary + reqForMonFormat, headers={'Authorization': f'Bearer {token}'})
                 dataMondM = requestMM.json()
                 rawMondM = dataMondM['content']
                 rawMondTM = rawMondM.get('mealTaps', None)
@@ -328,7 +315,7 @@ def home(request):
                 startDateTues = str(day.date())
                 endDateTues = str(day.date())
                 reqForTueFormat = '?startDate='+ startDateTues + '_00:00&endDate=' + endDateTues + '_23:59'
-                requestTuesday = requests.get(summary + reqForTueFormat, headers={'Authorization': f'Bearer {access_token}'})
+                requestTuesday = requests.get(summary + reqForTueFormat, headers={'Authorization': f'Bearer {token}'})
                 #make subsequent requests for tuesday and Monday
                 ##
                 dataTueM = requestTuesday.json()
@@ -357,7 +344,7 @@ def home(request):
                 MonSS = str(MonStartD.date())
                 reqMONForm = '?startDate='+ MonSS + '_00:00&endDate=' + MonEE + '_23:59'
                 ##print(reqTueForm)
-                requestYAmon = requests.get(summary + reqMONForm, headers={'Authorization': f'Bearer {access_token}'})
+                requestYAmon = requests.get(summary + reqMONForm, headers={'Authorization': f'Bearer {token}'})
                 dataMONDD = requestYAmon.json()
                 rawMONDDD = dataMONDD['content']
                 rawMOO = rawMONDDD.get('mealTaps', 0)
@@ -386,7 +373,7 @@ def home(request):
                 #?startDate=2021-01-04_00:02&endDate=2021-02-05_00:00
                 reqForWedFormat = '?startDate='+ startDateWed + '_00:00&endDate=' + endDateWed + '_23:59'
                 ##print(reqForWedFormat)
-                requestWednesday = requests.get(summary + reqForWedFormat, headers={'Authorization': f'Bearer {access_token}'})
+                requestWednesday = requests.get(summary + reqForWedFormat, headers={'Authorization': f'Bearer {token}'})
                 dataWed = requestWednesday.json()
                 rawWed = dataWed['content']
                 rawWedd = rawWed.get('mealTaps', 0)
@@ -412,7 +399,7 @@ def home(request):
                 tueSS = str(tueStartD.date())
                 reqTueForm = '?startDate='+ tueEE + '_00:00&endDate=' + tueSS + '_23:59'
                 ##print(reqTueForm)
-                requesttue = requests.get(summary + reqTueForm, headers={'Authorization': f'Bearer {access_token}'})
+                requesttue = requests.get(summary + reqTueForm, headers={'Authorization': f'Bearer {token}'})
                 dataTueD = requesttue.json()
                 rawTuesd = dataTueD['content']
                 rawTuesday = rawTuesd.get('mealTaps', 0)
@@ -440,7 +427,7 @@ def home(request):
                 ##print(mondayendD)
                 reqMonForm = '?startDate='+ monSS + '_00:00&endDate=' + monEE + '_23:59'
                 ##print(reqMonForm)
-                requestmond = requests.get(summary + reqMonForm, headers={'Authorization': f'Bearer {access_token}'})
+                requestmond = requests.get(summary + reqMonForm, headers={'Authorization': f'Bearer {token}'})
                 dataMonD = requestmond.json()
                 rawMond = dataMonD['content']
                 rawMonday = rawMond.get('mealTaps', 0)
@@ -463,7 +450,7 @@ def home(request):
                 startDateThor = str(day.date())
                 endDateThor = str(day.date())
                 reqForThorFormat = '?startDate='+ startDateThor + '_00:00&endDate=' + endDateThor + '_23:59'
-                requestThursday = requests.get(summary + reqForThorFormat, headers={'Authorization': f'Bearer {access_token}'})
+                requestThursday = requests.get(summary + reqForThorFormat, headers={'Authorization': f'Bearer {token}'})
                 #get json data for Thursday
                 dataThur = requestThursday.json()
                 rawThur = dataThur['content']
@@ -488,7 +475,7 @@ def home(request):
                 wedEE = str(weddoEnd.date())
                 wedSS = str(weddoStart.date())
                 reqWedF = '?startDate='+ wedSS + '_00:00&endDate=' + wedEE + '_23:59'
-                requestWED = requests.get(summary + reqWedF, headers={'Authorization': f'Bearer {access_token}'})
+                requestWED = requests.get(summary + reqWedF, headers={'Authorization': f'Bearer {token}'})
                 datawedD = requestWED.json()
                 rawWeds = datawedD['content']
                 rawWednesday = rawWeds.get('mealTaps', 0)
@@ -512,7 +499,7 @@ def home(request):
                 tuedEE = str(tuEnd.date())
                 tuedSS = str(tuStart.date())
                 reqtueF = '?startDate='+ tuedSS + '_00:00&endDate=' + tuedEE + '_23:59'
-                requestTUE = requests.get(summary + reqtueF, headers={'Authorization': f'Bearer {access_token}'})
+                requestTUE = requests.get(summary + reqtueF, headers={'Authorization': f'Bearer {token}'})
                 dataTUEDraw = requestTUE.json()
                 rawtuesdaY = dataTUEDraw['content']
                 rawW = rawtuesdaY.get('mealTaps', 0)
@@ -537,7 +524,7 @@ def home(request):
                 tuedEEM = str(tuEndM.date())
                 tuedSSM = str(tuStartM.date())
                 reqmondF = '?startDate='+ tuedSSM + '_00:00&endDate=' + tuedEEM + '_23:59'
-                requestmondo = requests.get(summary + reqmondF, headers={'Authorization': f'Bearer {access_token}'})
+                requestmondo = requests.get(summary + reqmondF, headers={'Authorization': f'Bearer {token}'})
                 dataMONDAYraw = requestmondo.json()
                 rawDM = dataMONDAYraw['content']
                 rawWDM = rawDM.get('mealTaps', 0)
@@ -558,7 +545,7 @@ def home(request):
                 startDateFri = str(day.date())
                 endDateFri = str(day.date())
                 reqForFriFormat = '?startDate='+ startDateFri + '_00:00&endDate=' + endDateFri + '_23:59'
-                requestFriday = requests.get(summary + reqForFriFormat, headers={'Authorization': f'Bearer {access_token}'})
+                requestFriday = requests.get(summary + reqForFriFormat, headers={'Authorization': f'Bearer {token}'})
             ##########################SAMPLE!"£$&^*()(*&^%$%^&^%$%^&$$^&&*^%$"!"£$%^^&&*****")))))((((((((((((****************))))))))))))
                 
                 #get json data for Friday
@@ -585,7 +572,7 @@ def home(request):
                 thuEE = str(thuEnd.date())
                 thuSS = str(thuStart.date())
                 reqthuF = '?startDate='+ thuSS + '_00:00&endDate=' + thuEE + '_23:59'
-                requestTHUR = requests.get(summary + reqthuF, headers={'Authorization': f'Bearer {access_token}'})
+                requestTHUR = requests.get(summary + reqthuF, headers={'Authorization': f'Bearer {token}'})
                 datathufD = requestTHUR.json()
                 rawThurr = datathufD['content']
                 rawTHURSDAY = rawThurr.get('mealTaps', 0)
@@ -609,7 +596,7 @@ def home(request):
                 tudEE = str(tEnd.date())
                 tudSS = str(ttart.date())
                 reqtF = '?startDate='+ tudSS + '_00:00&endDate=' + tudEE + '_23:59'
-                requestWEDNESDAY = requests.get(summary + reqtF, headers={'Authorization': f'Bearer {access_token}'})
+                requestWEDNESDAY = requests.get(summary + reqtF, headers={'Authorization': f'Bearer {token}'})
                 dataWEDNESDAYraw = requestWEDNESDAY.json()
                 rawraw = dataWEDNESDAYraw['content']
                 rawrawraw = rawraw.get('mealTaps', 0)
@@ -634,7 +621,7 @@ def home(request):
                 tuedE = str(tuEndTuesday.date())
                 tuedS = str(tuStartTuesday.date())
                 reqtuF = '?startDate='+ tuedS + '_00:00&endDate=' + tuedE + '_23:59'
-                requestfortuesday = requests.get(summary + reqtuF, headers={'Authorization': f'Bearer {access_token}'})
+                requestfortuesday = requests.get(summary + reqtuF, headers={'Authorization': f'Bearer {token}'})
                 dataTUESDAYraw = requestfortuesday.json()
                 rawTD = dataTUESDAYraw['content']
                 rawTDD = rawTD.get('mealTaps', 0)
@@ -659,7 +646,7 @@ def home(request):
                 tuedEDF = str(tuEndMONDAY.date())
                 tuedSDF = str(tuStartMONDAY.date())
                 reqtuFDF = '?startDate='+ tuedSDF + '_00:00&endDate=' + tuedEDF + '_23:59'
-                requestformONDAY = requests.get(summary + reqtuFDF, headers={'Authorization': f'Bearer {access_token}'})
+                requestformONDAY = requests.get(summary + reqtuFDF, headers={'Authorization': f'Bearer {token}'})
                 dataMODNAYraw = requestformONDAY.json()
                 rawTDC = dataMODNAYraw['content']
                 rawTDDC = rawTDC.get('mealTaps', 0)
@@ -747,7 +734,7 @@ def home(request):
                         theYearM = mondayday.strftime("%Y") #2021
                         stdate = str(mondayday.date())
                         timeFormatDay = '?startDate='+ stdate + '_00:00&endDate=' + stdate + '_23:59'
-                        requestMondayFormat = requests.get(summary + timeFormatDay, headers={'Authorization': f'Bearer {access_token}'})
+                        requestMondayFormat = requests.get(summary + timeFormatDay, headers={'Authorization': f'Bearer {token}'})
                         print("TESTING:", requestMondayFormat)
                         rawResponseMonday = requestMondayFormat.json()
                         cleanedMonday = rawResponseMonday['content']
@@ -865,7 +852,7 @@ def home(request):
                         theYearT = tuesdayday.strftime("%Y") #2021
                         sttdate = str(tuesdayday.date())
                         timeFormatDayy = '?startDate='+ sttdate + '_00:00&endDate=' + sttdate + '_23:59'
-                        requestTuesdayFormat = requests.get(summary + timeFormatDayy, headers={'Authorization': f'Bearer {access_token}'})
+                        requestTuesdayFormat = requests.get(summary + timeFormatDayy, headers={'Authorization': f'Bearer {token}'})
                         #print("TESTING:", requestTuesdayFormat)
                         rawResponseTuesday = requestTuesdayFormat.json()
                         cleanedTuesday = rawResponseTuesday['content']
@@ -979,7 +966,7 @@ def home(request):
                         theYearW = wednesdayday.strftime("%Y") #2021
                         sttddate = str(wednesdayday.date())
                         timeFormatDayyy = '?startDate='+ sttddate + '_00:00&endDate=' + sttddate + '_23:59'
-                        requestWednesdayFormat = requests.get(summary + timeFormatDayyy, headers={'Authorization': f'Bearer {access_token}'})
+                        requestWednesdayFormat = requests.get(summary + timeFormatDayyy, headers={'Authorization': f'Bearer {token}'})
                         #print("TESTING:", requestTuesdayFormat)
                         rawResponseWednesday = requestWednesdayFormat.json()
                         cleanedWednesday = rawResponseWednesday['content']
@@ -1100,7 +1087,7 @@ def home(request):
                         theYearMTT = mondaysiku.strftime("%Y") #2021
                         stidate = str(mondaysiku.date())
                         timeFormatDayFriday = '?startDate='+ stidate + '_00:00&endDate=' + stidate + '_23:59'
-                        requestMondayFormatFri = requests.get(summary + timeFormatDayFriday, headers={'Authorization': f'Bearer {access_token}'})
+                        requestMondayFormatFri = requests.get(summary + timeFormatDayFriday, headers={'Authorization': f'Bearer {token}'})
                         #print("TESTING:", requestMondayFormat)
                         rawResponseMondayFri = requestMondayFormatFri.json()
                         cleanedMondayFri = rawResponseMondayFri['content']
@@ -1217,7 +1204,7 @@ def home(request):
                         theYearTT = tuesdaysiku.strftime("%Y") #2021
                         stiddate = str(tuesdaysiku.date())
                         timeFormatDD = '?startDate='+ stiddate + '_00:00&endDate=' + stiddate + '_23:59'
-                        requestTuesdayFormatFri = requests.get(summary + timeFormatDD, headers={'Authorization': f'Bearer {access_token}'})
+                        requestTuesdayFormatFri = requests.get(summary + timeFormatDD, headers={'Authorization': f'Bearer {token}'})
                         #print("TESTING:", requestMondayFormat)
                         rawResponseTuesdayFri = requestTuesdayFormatFri.json()
                         cleanedTuesdayFri = rawResponseTuesdayFri['content']
@@ -1333,7 +1320,7 @@ def home(request):
                         YearTT = wednesdaysiku.strftime("%Y") #2021
                         iddate = str(wednesdaysiku.date())
                         timeFormatPP = '?startDate='+ iddate + '_00:00&endDate=' + iddate + '_23:59'
-                        requestWednesdayFormatFri = requests.get(summary + timeFormatPP, headers={'Authorization': f'Bearer {access_token}'})
+                        requestWednesdayFormatFri = requests.get(summary + timeFormatPP, headers={'Authorization': f'Bearer {token}'})
                         #print("TESTING:", requestMondayFormat)
                         rawResponseWednesdayFri = requestWednesdayFormatFri.json()
                         cleanedWednesdayFri = rawResponseWednesdayFri['content']
@@ -1449,7 +1436,7 @@ def home(request):
                         earTT = thursdaysiku.strftime("%Y") #2021
                         ddate = str(thursdaysiku.date())
                         ormatPP = '?startDate='+ ddate + '_00:00&endDate=' + ddate + '_23:59'
-                        requestThursdayFormatFri = requests.get(summary + ormatPP, headers={'Authorization': f'Bearer {access_token}'})
+                        requestThursdayFormatFri = requests.get(summary + ormatPP, headers={'Authorization': f'Bearer {token}'})
                         #print("TESTING:", requestMondayFormat)
                         rawResponseThursdayFri = requestThursdayFormatFri.json()
                         cleanedThursdayFri = rawResponseThursdayFri['content']
@@ -1569,7 +1556,7 @@ def home(request):
                         tYearMTT = mondaysi.strftime("%Y") #2021
                         tidate = str(mondaysi.date())
                         timeFormatDayWedd = '?startDate='+ tidate + '_00:00&endDate=' + tidate + '_23:59'
-                        requestMondayFormatM = requests.get(summary + timeFormatDayWedd, headers={'Authorization': f'Bearer {access_token}'})
+                        requestMondayFormatM = requests.get(summary + timeFormatDayWedd, headers={'Authorization': f'Bearer {token}'})
                         #print("TESTING:", requestMondayFormat)
                         rawResponseMondayWED = requestMondayFormatM.json()
                         cleanedMondayWED = rawResponseMondayWED['content']
@@ -1685,7 +1672,7 @@ def home(request):
                         YearMTT = tuesdaysi.strftime("%Y") #2021
                         idate = str(tuesdaysi.date())
                         timeFormatDayTUE = '?startDate='+ idate + '_00:00&endDate=' + idate + '_23:59'
-                        requestMondayFormatT = requests.get(summary + timeFormatDayTUE, headers={'Authorization': f'Bearer {access_token}'})
+                        requestMondayFormatT = requests.get(summary + timeFormatDayTUE, headers={'Authorization': f'Bearer {token}'})
                         #print("TESTING:", requestMondayFormat)
                         rawResponseMondayTU = requestMondayFormatT.json()
                         cleanedMondayTUE = rawResponseMondayTU['content']
@@ -1804,7 +1791,7 @@ def home(request):
                         tYearMTTF = mondaysis.strftime("%Y") #2021
                         tidateFFF = str(mondaysis.date())
                         timeFormatDayMM = '?startDate='+ tidateFFF + '_00:00&endDate=' + tidateFFF + '_23:59'
-                        requestMondayFormatTT = requests.get(summary + timeFormatDayMM, headers={'Authorization': f'Bearer {access_token}'})
+                        requestMondayFormatTT = requests.get(summary + timeFormatDayMM, headers={'Authorization': f'Bearer {token}'})
                         #print("TESTING:", requestMondayFormat)
                         rawResponseMondayMM = requestMondayFormatTT.json()
                         cleanedMondayMON = rawResponseMondayMM['content']
@@ -1926,7 +1913,7 @@ def home(request):
                 yearfordate = startdateentered[:4]
                 #############################################
                 datetimesetting = '?startDate='+ startdateentered + '_00:00&endDate=' + enddateentered + '_23:59'
-                datetimesett = requests.get(summary + datetimesetting, headers={'Authorization': f'Bearer {access_token}'})
+                datetimesett = requests.get(summary + datetimesetting, headers={'Authorization': f'Bearer {token}'})
                 rawdatetime = datetimesett.json()
                 cleaneddatetime = rawdatetime['content']
                 datetimemealtaps =  cleaneddatetime.get('mealTaps', None)
@@ -2108,15 +2095,18 @@ def home(request):
         return redirect('/login')
 
 def logout(request):
-    json={"token": f'{access_token}', "userId": "1"}
-    headers = {'Authorization': f'Bearer {access_token}'}
+    token = request.session['access_token']
+    json={"token": f'{token}', "userId": "1"}
+    headers = {'Authorization': f'Bearer {token}'}
     response3 = requests.post('https://tap2eat.co.ke/pilot/api/v1/user/auth/sign-out', json=json, headers=headers)
     print(response3.status_code)
     del request.session['user']
+    del request.session['access_token']
     return redirect('/login')
 
 def usertable1(request):
-    response2 = requests.get('https://tap2eat.co.ke/pilot/api/v1/user'+'?pgSize=10000000&q=role.idEQ3', headers={'Authorization': f'Bearer {access_token}'})
+    token = request.session['access_token']
+    response2 = requests.get('https://tap2eat.co.ke/pilot/api/v1/user'+'?pgSize=10000000&q=role.idEQ3', headers={'Authorization': f'Bearer {token}'})
     if response2.status_code == 200 and 'user' in request.session:
         current_user = request.session['user']
         data1 = response2.json()
@@ -2141,7 +2131,8 @@ def usertable1(request):
 
 
 def usertable2(request):
-    response2 = requests.get('https://tap2eat.co.ke/pilot/api/v1/user'+'?pgSize=1000000&q=role.idEQ4', headers={'Authorization': f'Bearer {access_token}'})
+    token = request.session['access_token']
+    response2 = requests.get('https://tap2eat.co.ke/pilot/api/v1/user'+'?pgSize=1000000&q=role.idEQ4', headers={'Authorization': f'Bearer {token}'})
     #data1 = response2.json()
     #data1['content']['data']
     #print("Token: " +access_token)
@@ -2170,7 +2161,7 @@ def usertable2(request):
             #print(toSearch)
             #filterType1 = 'customerReferenceEQ'
             #filterType2 = 'mpesaReceiptNumberEQ'
-            searchRequest = requests.get('https://tap2eat.co.ke/pilot/api/v1/user'+'?pgSize=10000000&q=role.idEQ4,firstNameEQ'+toSearch, headers={'Authorization': f'Bearer {access_token}'})
+            searchRequest = requests.get('https://tap2eat.co.ke/pilot/api/v1/user'+'?pgSize=10000000&q=role.idEQ4,firstNameEQ'+toSearch, headers={'Authorization': f'Bearer {token}'})
             found = searchRequest.json()
             found1 = found['content']
             found2 = found1.get('data', None)
@@ -2189,7 +2180,8 @@ def usertable2(request):
         return render(request, "login.html")
 
 def usertable3(request):
-    response2 = requests.get('https://tap2eat.co.ke/pilot/api/v1/user'+'?pgSize=10000000&q=role.idEQ5', headers={'Authorization': f'Bearer {access_token}'})
+    token = request.session['access_token']
+    response2 = requests.get('https://tap2eat.co.ke/pilot/api/v1/user'+'?pgSize=10000000&q=role.idEQ5', headers={'Authorization': f'Bearer {token}'})
     #data1 = response2.json()
     #data1['content']['data']
     #print("Token: " +access_token)
@@ -2219,7 +2211,7 @@ def usertable3(request):
             #print(toSearch)
             #filterType1 = 'customerReferenceEQ'
             #filterType2 = 'mpesaReceiptNumberEQ'
-            searchRequest = requests.get('https://tap2eat.co.ke/pilot/api/v1/user'+'?pgSize=10000000&q=role.idEQ5,firstNameEQ'+toSearch, headers={'Authorization': f'Bearer {access_token}'})
+            searchRequest = requests.get('https://tap2eat.co.ke/pilot/api/v1/user'+'?pgSize=10000000&q=role.idEQ5,firstNameEQ'+toSearch, headers={'Authorization': f'Bearer {token}'})
             found = searchRequest.json()
             found1 = found['content']
             found2 = found1.get('data', None)
@@ -2240,7 +2232,8 @@ def usertable3(request):
 
 
 def dailyreports(request):
-    response2 = requests.get('https://tap2eat.co.ke/pilot/api/v1/user'+'?pgSize=100000&q=role.idEQ5', headers={'Authorization': f'Bearer {access_token}'})
+    token = request.session['access_token']
+    response2 = requests.get('https://tap2eat.co.ke/pilot/api/v1/user'+'?pgSize=100000&q=role.idEQ5', headers={'Authorization': f'Bearer {token}'})
     #data1 = response2.json()
     #data1['content']['data']
     #print("Token: " +access_token)
@@ -2262,6 +2255,7 @@ def dailyreports(request):
     return response       
 
 def createuser(request):
+    token = request.session['access_token']
     if request.method == 'POST' and 'user' in request.session:
         current_user = request.session['user']
         firstname = (request.POST['first_name'])
@@ -2280,7 +2274,7 @@ def createuser(request):
             'contacts':[{'typeId':1, 'value':username}],
         }
         #print(data)
-        response2 = requests.post("https://tap2eat.co.ke/pilot/api/v1/user", json=data ,headers={'Authorization': f'Bearer {access_token}'})
+        response2 = requests.post("https://tap2eat.co.ke/pilot/api/v1/user", json=data ,headers={'Authorization': f'Bearer {token}'})
         #print(response2.status_code)
         if response2.status_code == 200:
             return redirect('/home')
@@ -2290,7 +2284,8 @@ def createuser(request):
 
 #MPESA Payments View
 def mpesa(request):
-    response2 = requests.get('https://tap2eat.co.ke/pilot/api/v1/payments'+'?pgSize=1000000000', headers={'Authorization': f'Bearer {access_token}'})
+    token = request.session['access_token']
+    response2 = requests.get('https://tap2eat.co.ke/pilot/api/v1/payments'+'?pgSize=1000000000', headers={'Authorization': f'Bearer {token}'})
     #print("Token: " +access_token)
     #print(response2.status_code)
     if response2.status_code == 200 and 'user' in request.session:
@@ -2322,7 +2317,7 @@ def mpesa(request):
                 filterType = 'customerReferenceEQ'
             else:
                 filterType = 'customerReferenceEQ'         
-            searchRequest = requests.get('https://tap2eat.co.ke/pilot/api/v1/payments'+'?pgSize=1000000000&q='+ filterType + toSearch, headers={'Authorization': f'Bearer {access_token}'})
+            searchRequest = requests.get('https://tap2eat.co.ke/pilot/api/v1/payments'+'?pgSize=1000000000&q='+ filterType + toSearch, headers={'Authorization': f'Bearer {token}'})
             found = searchRequest.json()
             found1 = found['content']
             found2 = found1.get('data', None)
@@ -2340,7 +2335,8 @@ def mpesa(request):
         return render(request, "login.html")
 
 def sms(request):
-    response2 = requests.get('https://tap2eat.co.ke/pilot/api/v1/user'+'?pgSize=1000000&q=role.idEQ4', headers={'Authorization': f'Bearer {access_token}'})
+    token = request.session['access_token']
+    response2 = requests.get('https://tap2eat.co.ke/pilot/api/v1/user'+'?pgSize=1000000&q=role.idEQ4', headers={'Authorization': f'Bearer {token}'})
     #data1 = response2.json()
     #data1['content']['data']
     #print("Token: " +access_token)
@@ -2364,7 +2360,8 @@ def sms(request):
 
 ################################################# Meal Taps EndPoint
 def taptap(request):
-    response2 = requests.get('https://tap2eat.co.ke/pilot/api/v1/meal/tap?pgSize=10000000', headers={'Authorization': f'Bearer {access_token}'})
+    token = request.session['access_token']
+    response2 = requests.get('https://tap2eat.co.ke/pilot/api/v1/meal/tap?pgSize=10000000', headers={'Authorization': f'Bearer {token}'})
     #data1 = response2.json()
     #data1['content']['data']
     #print("Token: " +access_token)
@@ -2395,7 +2392,7 @@ def taptap(request):
             ##print(toSearch)
             #filterType1 = 'customerReferenceEQ'
             #filterType2 = 'mpesaReceiptNumberEQ'
-            searchRequest = requests.get('https://tap2eat.co.ke/pilot/api/v1/meal/tap'+'?pgSize=10000000&q=role.idEQ5,firstNameEQ'+toSearch, headers={'Authorization': f'Bearer {access_token}'})
+            searchRequest = requests.get('https://tap2eat.co.ke/pilot/api/v1/meal/tap'+'?pgSize=10000000&q=role.idEQ5,firstNameEQ'+toSearch, headers={'Authorization': f'Bearer {token}'})
             found = searchRequest.json()
             found1 = found['content']
             found2 = found1.get('data', None)
