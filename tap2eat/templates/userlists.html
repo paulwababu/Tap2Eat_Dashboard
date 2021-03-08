@@ -1,0 +1,373 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+ 
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://paulkiragu621.github.io/staticFiles/assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="shortcut icon" href="https://image.freepik.com/free-vector/corn-cobs-realistic_1284-14091.jpg" type="image/x-icon">
+    <link href="https://paulkiragu621.github.io/staticFiles/assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://paulkiragu621.github.io/staticFiles/assets/libs/css/style.css">
+    <link rel="stylesheet" href="https://paulkiragu621.github.io/staticFiles/assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
+    <link rel="stylesheet" href="https://paulkiragu621.github.io/staticFiles/assets/vendor/fonts/material-design-iconic-font/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="https://paulkiragu621.github.io/staticFiles/assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
+    <title> Tap2Eat - Feeding The Future</title>
+</head>
+
+<body>
+    <!-- ============================================================== -->
+    <!-- main wrapper -->
+    <!-- ============================================================== -->
+    <div class="dashboard-main-wrapper">
+        <!-- ============================================================== -->
+        <!-- navbar -->
+        <!-- ============================================================== -->
+        <div class="dashboard-header">
+            <nav class="navbar navbar-expand-lg bg-white fixed-top">
+                <a class="navbar-brand" href="/home">| Tap2Eat</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse " id="navbarSupportedContent">
+                    <ul class="navbar-nav ml-auto navbar-right-top">
+                        
+                        <li class="nav-item dropdown notification">
+                            <ul class="dropdown-menu dropdown-menu-right notification-dropdown">
+                                <li>
+                                    <div class="notification-title"> Notification</div>
+                                    <div class="notification-list">
+                                        <div class="list-group">
+                                            <a href="#" class="list-group-item list-group-item-action active">
+                                                <div class="notification-info">
+                                                    <div class="notification-list-user-img"><img src="{% static 'assets/images/avatar-2.jpg' %}" alt="" class="user-avatar-md rounded-circle"></div>
+                                                    <div class="notification-list-user-block"><span class="notification-list-user-name">Jeremy Rakestraw</span>accepted your invitation to join the team.
+                                                        <div class="notification-date">2 min ago</div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <a href="#" class="list-group-item list-group-item-action">
+                                                <div class="notification-info">
+                                                    <div class="notification-list-user-img"><img src="{% static 'assets/images/avatar-3.jpg' %}" alt="" class="user-avatar-md rounded-circle"></div>
+                                                    <div class="notification-list-user-block"><span class="notification-list-user-name">John Abraham </span>is now following you
+                                                        <div class="notification-date">2 days ago</div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <a href="#" class="list-group-item list-group-item-action">
+                                                <div class="notification-info">
+                                                    <div class="notification-list-user-img"><img src="{% static 'assets/images/avatar-4.jpg' %}" alt="" class="user-avatar-md rounded-circle"></div>
+                                                    <div class="notification-list-user-block"><span class="notification-list-user-name">Monaan Pechi</span> is watching your main repository
+                                                        <div class="notification-date">2 min ago</div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <a href="#" class="list-group-item list-group-item-action">
+                                                <div class="notification-info">
+                                                    <div class="notification-list-user-img"><img src="{% static 'assets/images/avatar-5.jpg' %}" alt="" class="user-avatar-md rounded-circle"></div>
+                                                    <div class="notification-list-user-block"><span class="notification-list-user-name">Jessica Caruso</span>accepted your invitation to join the team.
+                                                        <div class="notification-date">2 min ago</div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="list-footer"> <a href="#">View all notifications</a></div>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown connection">
+                             <ul class="dropdown-menu dropdown-menu-right connection-dropdown">
+                                
+                                <li>
+                                    <div class="conntection-footer"><a href="#">More</a></div>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown nav-user">
+                            <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="https://img.icons8.com/material/96/000000/user-male-circle--v1.png" class="user-avatar-md rounded-circle"></a>
+                            <div class="dropdown-menu dropdown-menu-right nav-user-dropdown" aria-labelledby="navbarDropdownMenuLink2">
+                               
+                                {% if current_user %}
+                                <a class="dropdown-item" href="/logout"><i class="fas fa-power-off mr-2"></i>{{ current_user }} | Logout</a>
+                                {% else %}
+                                <a class="dropdown-item" href="/login"><i class="fas fa-power-off mr-2"></i>Login</a>
+                                {% endif %}
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <!-- ============================================================== -->
+        <!-- end navbar -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- left sidebar -->
+        <!-- ============================================================== -->
+        <div class="nav-left-sidebar sidebar">
+            <div class="menu-list">
+                <nav class="navbar navbar-expand-lg navbar-dark">
+                    <a class="d-xl-none d-lg-none" href="#">Main Dashboard</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav flex-column">
+                            <li class="nav-divider">
+                                Menu
+                            </li>
+                            <li class="nav-item ">
+                                <a class="nav-link" href="/home" aria-expanded="false" data-target="#submenu-1" aria-controls="submenu-1"><i class="fa fa-fw fa-user-circle"></i>Dashboard <span class="badge badge-success"></span></a>
+                            </li>
+                           
+                            <!--Show This to SuperUser Only-->
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-2" aria-controls="submenu-2"><i class="fa fa-fw fa-rocket"></i>Users</a>
+                                <div id="submenu-2" class="collapse submenu">
+                                    <ul class="nav flex-column">
+                                        {% if current_user == 'system.admin@tap2eat.co.ke' %}
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="/createuser">Create Users</a>
+                                        </li>
+                                        {% endif %}
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="/usertable1">System Users</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="/usertable2">Parents</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="/usertable3">Students</a>
+                                        </li>
+                                        
+                                    </ul>
+                                </div>
+                            </li>
+                        <!--End Restriction Here-->
+                            
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-3" aria-controls="submenu-3"><i class="fas fa-fw fa-chart-pie"></i>Detailed Reports</a>
+                            <div id="submenu-3" class="collapse submenu">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/mpesa">MPESA Transactions</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/mealtap">Meal Tap Analysis</a>
+                                    </li>
+                                    
+                                </ul>
+                            </div>
+                        </li>
+                            </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- end left sidebar -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- wrapper  -->
+        <!-- ============================================================== -->
+        <div class="dashboard-wrapper">
+            <div class="container-fluid  dashboard-content">
+                <!-- ============================================================== -->
+                <!-- pageheader -->
+                <!-- ============================================================== -->
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="page-header">
+                            <h2 class="pageheader-title">Users List</h2>
+                            <p class="pageheader-text">Proin placerat ante duiullam scelerisque a velit ac porta, fusce sit amet vestibulum mi. Morbi lobortis pulvinar quam.</p>
+                            <div class="page-breadcrumb">
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="#" class="breadcrumb-link">Dashboard</a></li>
+                                        <li class="breadcrumb-item"><a href="#" class="breadcrumb-link">Tables</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page">System Users</li>
+                                    </ol>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- end pageheader -->
+                <!-- ============================================================== -->
+                <div class="row">
+                    <!-- ============================================================== -->
+                    <!-- basic table  -->
+                    
+                    <!-- ============================================================== -->
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="card">
+                            
+                            <h5 class="card-header">System Users Table</h5>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    
+                                    <table class="table table-striped table-bordered first">
+                                        <thead>
+                                            
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>First Name</th>
+                                                <th>Last Name</th>
+                                                <th>Balance</th>
+                                                <th>Status</th>
+                                               
+                                            </tr>
+                                        </thead>
+                                        
+                                        <tbody>
+                                            {% for todo in page1.object_list %}
+                                            <tr>
+                                                
+                                                <td>{{ todo.userId }}</td>
+                                                <td>{{ todo.firstName }}</td>
+                                                <td>{{ todo.lastName }}</td>
+                                                <td>Ksh. {{ todo.balance }}</td>
+                                                {% if todo.status == 'active' %}
+                                                <td><span class="badge-dot badge-success mr-1"></span>active </td>
+                                                {% else %}
+                                                <td><span class="badge-dot badge-danger mr-1"></span>inactive </td>
+                                                {% endif %}
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                        <script>
+                                            function downloadCSV(csv, filename) {
+    var csvFile;
+    var downloadLink;
+
+    // CSV file
+    csvFile = new Blob([csv], {type: "text/csv"});
+
+    // Download link
+    downloadLink = document.createElement("a");
+
+    // File name
+    downloadLink.download = filename;
+
+    // Create a link to the file
+    downloadLink.href = window.URL.createObjectURL(csvFile);
+
+    // Hide download link
+    downloadLink.style.display = "none";
+
+    // Add the link to DOM
+    document.body.appendChild(downloadLink);
+
+    // Click download link
+    downloadLink.click();
+}
+
+function exportTableToCSV(filename) {
+    var csv = [];
+    var rows = document.querySelectorAll("table tr");
+    
+    for (var i = 0; i < rows.length; i++) {
+        var row = [], cols = rows[i].querySelectorAll("td, th");
+        
+        for (var j = 0; j < cols.length; j++) 
+            row.push(cols[j].innerText);
+        
+        csv.push(row.join(","));        
+    }
+
+    // Download CSV file
+    downloadCSV(csv.join("\n"), filename);
+}
+
+                                        </script>
+                                    </table>
+                                    <br>
+                                    <button type="button" class="btn btn-primary" onclick="exportTableToCSV('users.csv')">Export Users Table To CSV File</button>
+                                </div>
+                                <br>
+                                <br>
+                                            <nav aria-label="...">
+                                                {% if page1.has_other_pages %}
+                                                <ul class="pagination justify-content-center">
+                                                    {% if page1.has_previous %}
+                                                  <li class="page-item">
+                                                    <a class="page-link" href="?page={{ page1.previous_page_number }}" tabindex="-1">Previous</a>
+                                                  </li>
+                                                  {% endif %}
+
+                                                  {% for i in page1.paginator.page_range %}
+                                                     {% if page1.number == i %}
+                                                  <li class="page-item active">
+                                                      <a class="page-link" href="#">{{ i }}<span class="sr-only">(current)</span></a>
+                                                   </li>
+                                                  {% endif %}
+                                                  {% endfor %} 
+                                                  <li class="page-item">
+                                                    {% if page1.has_next %}
+                                                    <a class="page-link" href="?page={{ page1.next_page_number }}">Next</a>
+                                                    {% endif %}
+                                                  </li>
+                                                </ul>
+                                                {% endif %}
+                                            </nav>
+                            </div>
+                        </div>
+                    </div>
+               
+                    <!-- ============================================================== -->
+                    <!-- end basic table  -->
+                    <!-- ============================================================== -->
+                </div>
+                
+            </div>
+            <!-- ============================================================== -->
+            <!-- footer -->
+            <!-- ============================================================== -->
+            <div class="footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            © 2020 Food4Education - Feeding <a href="https://www.linkedin.com/in/paul-wababu-660b511a7/">T</a>he Future.
+                        </div>
+                         <!-- https://github.com/paulwababu -->
+                         <!-- alienXconnections -->
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="text-md-right footer-links d-none d-sm-block">
+                                <a href="https://food4education.org/#our-solution">About</a>
+                                <a href="https://food4education.org/#get-involved">Support</a>
+                                <a href="https://food4education.org/contact/">Contact Us</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ============================================================== -->
+            <!-- end footer -->
+            <!-- ============================================================== -->
+        </div>
+    </div>
+        <!-- ============================================================== -->
+        <!-- end wrapper  -->
+        <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- end main wrapper  -->
+    <!-- ============================================================== -->
+    <!-- Optional JavaScript -->
+    <!-- jquery 3.3.1 -->
+    <script src="https://paulkiragu621.github.io/staticFiles/assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+    <!-- bootstap bundle js -->
+    <script src="https://paulkiragu621.github.io/staticFiles/assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
+    <!-- slimscroll js -->
+    <script src="https://paulkiragu621.github.io/staticFiles/assets/vendor/slimscroll/jquery.slimscroll.js"></script>
+    <!-- main js -->
+    <script src="https://paulkiragu621.github.io/staticFiles/assets/libs/js/main-js.js"></script>
+</body>
+ 
+</html>
