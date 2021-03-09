@@ -1,5 +1,6 @@
 {% load static %}
 {% load tz %}
+{% load cache %}
 <!doctype html>
 <html lang="en">
  
@@ -198,7 +199,7 @@
                                     <nav aria-label="breadcrumb">
                                        
                                         <ol class="breadcrumb">
-                                            <li class="breadcrumb-item"><a href="/home">Daily Reports</a></li>
+                                            <li class="breadcrumb-item"><a class="btn-outline-primary" type="button" href="/home">Daily Reports</a></li>
                                             <li class="breadcrumb-item active" aria-current="page"><a id="myBtn1" class="btn-outline-primary" type="button" href="#">{{ theDay }} {{ theDate }} {{ theMonth }} {{ theYear }} <i class="fas fa-caret-down"></i></a></li>
                                         </ol>
                                         <!--Should Load on clicking datetime-->                        
@@ -377,18 +378,21 @@
                                 <div class="row">
                                     <div class="col-sm-3 block">
                                         <div class="circle a">
+                                            
                                             {% if completedCorrect == '' %}
                                             <p><b> Meals Served</b>
                                                 <br>
                                                 0
                                             </p>
                                             {% else %}
+                                            
                                             <p><b> Meals Served</b>
                                                 <br>
                                                 {{ completedCorrect }}
                                             </p>
                                             
                                             {% endif %}
+                                            
                                         </div>
                                     </div>
                                     <div class="col-sm-3 block">
@@ -396,7 +400,7 @@
                                             {% if projectss == '' or projectss == 0 %}
                                             <p><b>Missed Meals</b> 
                                                 <br>
-                                                0 
+                                                0
                                             </p>
                                             {% else %}
                                             <p><b>Missed Meals</b> 
@@ -437,7 +441,7 @@
                                     background-color: #39c0dc;
                                 }
                                 .b {
-                                    background-color: #6d79e2;
+                                    background-color: rgb(200, 224, 64);
                                 }
                                 .c {
                                     background-color: #5c6dfd;
