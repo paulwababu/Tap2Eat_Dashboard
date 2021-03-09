@@ -134,12 +134,12 @@ def login(request):
     return render(request, 'signin.html')           
 
 def home(request):
-    summary = 'https://tap2eat.co.ke/pilot/api/v1/report/summary'
     try:
         token = request.session['access_token']
     except:
         print("Session Not found")
-        return render(request, 'home2.html')    
+        return render(request, 'home2.html')
+    summary = 'https://tap2eat.co.ke/pilot/api/v1/report/summary'       
     response2 = requests.get(summary, headers={'Authorization': f'Bearer {token}'})
     #print(response2.json())
     paymentsApi = 'https://tap2eat.co.ke/pilot/api/v1/payments'
