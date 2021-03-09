@@ -2247,34 +2247,39 @@ def dailyreports(request):
     return response       
 
 def createuser(request):
-    try:
-        token = request.session['access_token']
-    except:
-        return render(request, "home2.html")
-    if request.method == 'POST' and 'user' in request.session:
-        current_user = request.session['user']
-        firstname = (request.POST['first_name'])
-        lastname = (request.POST['last_name'])
-        username = (request.POST['phonenumber'])
-        password = (request.POST['psw'])
-        roleid = (request.POST['role'])
-        roleidd = int(roleid)
-        #password = (request.POST['psw'])
-        #Make a POST request
-        data = {
-            'firstName':firstname,
-            'lastName':lastname,
-            'roleId':roleidd,
-            'profile':{'passcode':password},
-            'contacts':[{'typeId':1, 'value':username}],
-        }
-        #print(data)
-        response2 = requests.post("https://tap2eat.co.ke/pilot/api/v1/user", json=data ,headers={'Authorization': f'Bearer {token}'})
-        #print(response2.status_code)
-        if response2.status_code == 200:
-            return redirect('/home')
-        else:
-            messages.warning(request, 'Account not created!')
+    if 'user' in request.session == 'system.admin@tap2eat.co.ke':
+        #do something
+        try:
+            token = request.session['access_token']
+        except:
+            return render(request, "home2.html")
+        if request.method == 'POST' and 'user' in request.session:
+            current_user = request.session['user']
+            firstname = (request.POST['first_name'])
+            lastname = (request.POST['last_name'])
+            username = (request.POST['phonenumber'])
+            password = (request.POST['psw'])
+            roleid = (request.POST['role'])
+            roleidd = int(roleid)
+            #password = (request.POST['psw'])
+            #Make a POST request
+            data = {
+                'firstName':firstname,
+                'lastName':lastname,
+                'roleId':roleidd,
+                'profile':{'passcode':password},
+                'contacts':[{'typeId':1, 'value':username}],
+            }
+            #print(data)
+            response2 = requests.post("https://tap2eat.co.ke/pilot/api/v1/user", json=data ,headers={'Authorization': f'Bearer {token}'})
+            #print(response2.status_code)
+            if response2.status_code == 200:
+                return redirect('/home')
+            else:
+                messages.warning(request, 'Account not created!')
+    else:
+        return HttpResponse("Not Allowed")
+
     return render(request, 'createuser.html')
 
 #MPESA Payments View
