@@ -2291,18 +2291,14 @@ def mpesa(request):
     except:
         return render(request, "home2.html")
     response2 = requests.get('https://tap2eat.co.ke/pilot/api/v1/payments'+'?pgSize=1000000000', headers={'Authorization': f'Bearer {token}'})
-    #print("Token: " +access_token)
-    #print(response2.status_code)
     if response2.status_code == 200 and 'user' in request.session:
         current_user = request.session['user']
         data1 = response2.json()
-        #todos = response2.json()
         projects = data1['content']
         todos = projects.get('data', 0)
-        ##print(todos)
         ###############################PAGINATE###############################
         p = Paginator(todos, 20)
-        ##print(p.count)#shows all items in page
+        ##print(p.count)#shows number of items in page
         pageNum = request.GET.get('page', 1)
         page1 = p.page(pageNum)
         data = {
@@ -2345,15 +2341,9 @@ def sms(request):
     except:
         return render(request, "home2.html")
     response2 = requests.get('https://tap2eat.co.ke/pilot/api/v1/user'+'?pgSize=1000000&q=role.idEQ4', headers={'Authorization': f'Bearer {token}'})
-    #data1 = response2.json()
-    #data1['content']['data']
-    #print("Token: " +access_token)
-    #print(response2.status_code)
     if response2.status_code == 200 and 'user' in request.session:
         current_user = request.session['user']
         data1 = response2.json()
-        ##print(data1)
-        #todos = response2.json()
         todoss = data1['content']
         todos = todoss.get('data', None)
     ###############################
