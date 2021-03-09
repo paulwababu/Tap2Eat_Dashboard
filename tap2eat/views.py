@@ -2247,7 +2247,9 @@ def dailyreports(request):
     return response       
 
 def createuser(request):
-    if 'user' in request.session == 'system.admin@tap2eat.co.ke':
+    username = request.session['user']
+    print(username)
+    if username == 'system.admin@tap2eat.co.ke':
         #do something
         try:
             token = request.session['access_token']
