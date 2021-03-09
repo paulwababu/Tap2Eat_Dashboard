@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 import requests
 import json
-from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 import requests
 import json
@@ -132,13 +131,15 @@ def login(request):
             access_token = access['token']
             request.session['access_token'] = access_token
             return redirect('home')
-        #return render(request, 'signin.html')
     return render(request, 'signin.html')           
 
 def home(request):
-    #currentDayTapsDate = '?startDate='+ startDate +'_00:00&endDate='+ endDate +'_23:59'
     summary = 'https://tap2eat.co.ke/pilot/api/v1/report/summary'
-    token = request.session['access_token']
+    try:
+        token = request.session['access_token']
+    except:
+        print("Session Not found")
+        return render(request, 'home2.html')    
     response2 = requests.get(summary, headers={'Authorization': f'Bearer {token}'})
     #print(response2.json())
     paymentsApi = 'https://tap2eat.co.ke/pilot/api/v1/payments'
@@ -150,16 +151,12 @@ def home(request):
             data5 = response2.json()
             todoss = data5['content']
             usera =  todoss.get('devices', 0)
-            ##print(usera)
-    
             data = {
                 "devices": usera,
                 }
             a = data['devices']#['nfc_tag']
             activee = (a.get('nfc_tag', None)) #
             tagg = (activee)
-            #taggMonFri = (activeeTaggw)
-            #print("tagg",tagg)
             #############################################################################
             #################Total Registered Users
             totalRegisteredUsers = data5['content']
@@ -174,7 +171,6 @@ def home(request):
                 registeredTotalNi = register.get("role")
                 if registeredTotalNi == 'student':
                     totalStudee = register['number']
-                #registeredTotalNi = register.get("totalRegisteredUsers")
             ##################### PENETRATION RATE #####################################################
 
             ######################TOTAL STUDENTS IN ENTITY########################################################
@@ -227,31 +223,17 @@ def home(request):
             mtondo = kesho_kutwa +timedelta(1)
             ###TAP ANALYSIS
             #########################################################################################
-            #Start by getting previous Tap Analysis
-            #dynamically get previous day by getting current day
-            ##print("Today datetime:", day)  #2021-02-23 08:29:31.179024
             previousDay = day - timedelta(1)
-            ##print("Previous Day from todays date: ", previousDay)
-            #get date only
-            #p = previousDay.date()
-            ##print("DateOnly:", p)
-            #get endDate
             endingDate = day - timedelta(1)
-            ##print(endingDate)
             p = endingDate.date()
-            ##print("DateOnly", p)
             startingDate = endingDate - timedelta(1)
-            ##print("Staring Date: ", startingDate)#
             pp = startingDate.date()
             startDate = str(pp)
             endDate = str(p)
-            ##print("StartDate: ", startDate)
-            ##print("EndDate: ", endDate)
             currentDayTapsDate = '?startDate='+ startDate +'_00:00&endDate='+ endDate +'_23:59'
             currentDayTaps = requests.get(summary + currentDayTapsDate, headers={'Authorization': f'Bearer {token}'})
             ##print(currentDayTapsDate)
             rawData = currentDayTaps.json()
-            #Now get the successful meal taps for previous day
             contentdata = rawData['content']
             contentdata1 = contentdata.get('mealTaps', 0)
             ##print(contentdata1)
@@ -262,28 +244,22 @@ def home(request):
                 corrects = item.get('status', 1)
                 if corrects == 'complete':
                     completedCorrects = item['count']
-                    ##print("Previous Day Successful Taps = ", completedCorrects)
 
             for itemi in contentdata1:
                 correctss = itemi.get('status', 0)
                 if correctss == 'rejected':
                     completedCorrectss = itemi['count']
-                    ##print("Previous Day Rejected Taps = ", completedCorrectss)
 
             for itemsi in contentdata1:
                 correctsss = itemsi.get('status', 0)
                 if correctsss == 'duplicate':
-                    completedCorrectsss = itemsi['count']
-                    ##print('Previous Day Duplicate Taps = ' ,completedCorrectsss)            
+                    completedCorrectsss = itemsi['count']            
             #previous day taps        
             previousDayTaps = completedCorrects
-            ##print("Previous Day Taps: ", completedCorrects)
             ########################################################################################
             ########### WEEKLY TAP TRENDS NEW #########################################################
             #get current day
             leo = day.strftime("%A")
-            ##print("Today is ", leo)
-            #get end and start date for all week
             if leo == 'Monday':
                 startDateMon = str(day.date())
                 endDateMon = str(day.date())
@@ -2092,10 +2068,13 @@ def home(request):
             }
             return render(request, "home.html",  data2) 
     else:
-        return redirect('/login')
+        return render(request, "home2.html")
 
 def logout(request):
-    token = request.session['access_token']
+    try:
+        token = request.session['access_token']
+    except:
+        return render(request, "home2.html")
     json={"token": f'{token}', "userId": "1"}
     headers = {'Authorization': f'Bearer {token}'}
     response3 = requests.post('https://tap2eat.co.ke/pilot/api/v1/user/auth/sign-out', json=json, headers=headers)
@@ -2105,7 +2084,10 @@ def logout(request):
     return redirect('/login')
 
 def usertable1(request):
-    token = request.session['access_token']
+    try:
+        token = request.session['access_token']
+    except:
+        return render(request, "home2.html")
     response2 = requests.get('https://tap2eat.co.ke/pilot/api/v1/user'+'?pgSize=10000000&q=role.idEQ3', headers={'Authorization': f'Bearer {token}'})
     if response2.status_code == 200 and 'user' in request.session:
         current_user = request.session['user']
@@ -2127,16 +2109,20 @@ def usertable1(request):
         ########################################################################
         return render(request, "userlists.html", data)
     else:
-        return render(request, "login.html")        
+        return render(request, "home2.html")
 
+def test(request):
+    return render(request, "home2.html")
+
+def test2(request):
+    return render(request, "base.html")
 
 def usertable2(request):
-    token = request.session['access_token']
+    try:
+        token = request.session['access_token']
+    except:
+        return render(request, "home2.html")
     response2 = requests.get('https://tap2eat.co.ke/pilot/api/v1/user'+'?pgSize=1000000&q=role.idEQ4', headers={'Authorization': f'Bearer {token}'})
-    #data1 = response2.json()
-    #data1['content']['data']
-    #print("Token: " +access_token)
-    #print(response2.status_code)
     if response2.status_code == 200 and 'user' in request.session:
         current_user = request.session['user']
         data1 = response2.json()
@@ -2177,10 +2163,13 @@ def usertable2(request):
         ###############################ENDPAGINATION##########################
         return render(request, "userlists2.html", data)
     else:
-        return render(request, "login.html")
+        return render(request, "home2.html")
 
 def usertable3(request):
-    token = request.session['access_token']
+    try:
+        token = request.session['access_token']
+    except:
+        return render(request, "home2.html")
     response2 = requests.get('https://tap2eat.co.ke/pilot/api/v1/user'+'?pgSize=10000000&q=role.idEQ5', headers={'Authorization': f'Bearer {token}'})
     #data1 = response2.json()
     #data1['content']['data']
@@ -2228,11 +2217,14 @@ def usertable3(request):
         ###############################ENDPAGINATION##########################
         return render(request, "userlists3.html", data)
     else:
-        return render(request, "login.html")        
+        return render(request, "home2.html")        
 
 
 def dailyreports(request):
-    token = request.session['access_token']
+    try:
+        token = request.session['access_token']
+    except:
+        return render(request, "home2.html")
     response2 = requests.get('https://tap2eat.co.ke/pilot/api/v1/user'+'?pgSize=100000&q=role.idEQ5', headers={'Authorization': f'Bearer {token}'})
     #data1 = response2.json()
     #data1['content']['data']
@@ -2255,7 +2247,10 @@ def dailyreports(request):
     return response       
 
 def createuser(request):
-    token = request.session['access_token']
+    try:
+        token = request.session['access_token']
+    except:
+        return render(request, "home2.html")
     if request.method == 'POST' and 'user' in request.session:
         current_user = request.session['user']
         firstname = (request.POST['first_name'])
@@ -2284,7 +2279,10 @@ def createuser(request):
 
 #MPESA Payments View
 def mpesa(request):
-    token = request.session['access_token']
+    try:
+        token = request.session['access_token']
+    except:
+        return render(request, "home2.html")
     response2 = requests.get('https://tap2eat.co.ke/pilot/api/v1/payments'+'?pgSize=1000000000', headers={'Authorization': f'Bearer {token}'})
     #print("Token: " +access_token)
     #print(response2.status_code)
@@ -2332,10 +2330,13 @@ def mpesa(request):
         ###############################ENDPAGINATION##########################
         return render(request, "mpesa.html", data)
     else:
-        return render(request, "login.html")
+        return render(request, "home2.html")
 
 def sms(request):
-    token = request.session['access_token']
+    try:
+        token = request.session['access_token']
+    except:
+        return render(request, "home2.html")
     response2 = requests.get('https://tap2eat.co.ke/pilot/api/v1/user'+'?pgSize=1000000&q=role.idEQ4', headers={'Authorization': f'Bearer {token}'})
     #data1 = response2.json()
     #data1['content']['data']
@@ -2360,27 +2361,20 @@ def sms(request):
 
 ################################################# Meal Taps EndPoint
 def taptap(request):
-    token = request.session['access_token']
+    try:
+        token = request.session['access_token']
+    except:
+        return render("home2.html")
     response2 = requests.get('https://tap2eat.co.ke/pilot/api/v1/meal/tap?pgSize=10000000', headers={'Authorization': f'Bearer {token}'})
-    #data1 = response2.json()
-    #data1['content']['data']
-    #print("Token: " +access_token)
-    #print(response2.status_code)
     if response2.status_code == 200 and 'user' in request.session:
         current_user = request.session['user']
         data1 = response2.json()
         #todos = response2.json()
         projects = data1['content']
         todos = projects.get('data', 0)
-        ##print(todos)
-        ###############################PAGINATE###############################
-        ###############################PAGINATE###############################
-        ########################################################################
         p = Paginator(todos, 20)
-        ##print(p.count)#shows all items in page
         pageNum = request.GET.get('page', 1)
         page1 = p.page(pageNum)
-        ##print()
         data = {
             "current_user":current_user,
             "page1":page1
@@ -2404,9 +2398,6 @@ def taptap(request):
                 "page1":pgSearch,
             }
             return render(request, "mealtaps.html", dataSearch)
-        ########################################################################
-        ###############################ENDPAGINATION##########################
-        ###############################ENDPAGINATION##########################
         return render(request, "mealtaps.html", data)
     else:
-        return render(request, "login.html")        
+        return render(request, "home2.html")        
