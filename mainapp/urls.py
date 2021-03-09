@@ -3,6 +3,7 @@ from tap2eat import views
 
 urlpatterns = [
     path('home/', views.home, name='home'),
+    path('', views.test2, name='home2'),
     path('createuser/', views.createuser, name="createuser"),
     path('usertable1/', views.usertable1, name="usertable1"),
     path('usertable2/', views.usertable2, name="usertable2"),
