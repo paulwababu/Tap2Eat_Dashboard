@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 import requests
 import json
-from django.shortcuts import render, redirect
 import requests
 import json
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -2248,7 +2247,6 @@ def dailyreports(request):
 
 def createuser(request):
     username = request.session['user']
-    print(username)
     if username == 'system.admin@tap2eat.co.ke':
         #do something
         try:
@@ -2278,7 +2276,7 @@ def createuser(request):
             if response2.status_code == 200:
                 return redirect('/home')
             else:
-                messages.warning(request, 'Account not created!')
+                return HttpResponse("Not Created")
     else:
         return HttpResponse("Not Allowed")
 
