@@ -220,15 +220,13 @@
                                                                 <button type="submit" name="btnform1" class="btn btn-primary" value="Tuesday">Tue</button>
                                                                 {% endif %}
                                                                 {% if currentDay == 'Wednesday' %}
-                                                                <input type="checkbox" id="weekday-mon" name="day" value="Monday" class="weekday" />
-                                                                <label for="weekday-mon">Mon</label>
-                                                                <input type="checkbox" id="weekday-tue" name="day" value="Tuesday" class="weekday" />
-                                                                <label for="weekday-tue">Tue</label>
+                                                                <button type="submit" name="btnform1" class="btn btn-primary" value="Monday">Mon</button>
+                                                                <button type="submit" name="btnform1" class="btn btn-primary" value="Tuesday">Tue</button>
                                                                 {% endif %}
                                                                 {% if currentDay == 'Thursday' %}
-                                                                <button type="submit" name="btnform1" class="btn-primary" value="Monday">Mon</button>
-                                                                <button type="submit" name="btnform1" class="btn-primary" value="Tuesday">Tue</button>
-                                                                <button type="submit" name="btnform1" class="btn-primary" value="Wednesday">Wed</button>
+                                                                <button type="submit" name="btnform1" class="btn btn-primary" value="Monday">Mon</button>
+                                                                <button type="submit" name="btnform1" class="btn btn-primary" value="Tuesday">Tue</button>
+                                                                <button type="submit" name="btnform1" class="btn btn-primary" value="Wednesday">Wed</button>
                                                                 {% endif %}
                                                                 {% if currentDay == 'Friday' %}
                                                                 <button type="submit" name="btnform1" class="btn btn-primary" value="Monday">Mon</button>
@@ -450,7 +448,7 @@
                                     background-color: #f14c6e;
                                 }
                             </style>
-                            <div class="col-4">
+                            <div class="col-4 col-xs-8">
                                 <style nonce="{{request.csp_nonce}}">
                                     .card {
                                         height: 80%;
@@ -512,7 +510,7 @@
                             
                             
                             <!-- hoverable table -->
-                            <div class="col-8 ">
+                            <div class="col-8 col-xs-12">
                                 <div class="card border-primary">
                                     <h5 class="card-header">Weekly Meal Trends</h5>
                                     <div class="card-body">
