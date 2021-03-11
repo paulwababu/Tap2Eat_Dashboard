@@ -218,3 +218,7 @@ $ 30 4 1 * * sudo certbot renew --quiet
 
 ```
 ```
+# Sneak Peak
+
+![security](https://user-images.githubusercontent.com/44939805/110807036-af6ea700-8293-11eb-970d-f293ec2fe16d.png)
+![security2](https://user-images.githubusercontent.com/44939805/110807147-cb724880-8293-11eb-9ce5-1f1f5c704531.png)
