@@ -2,8 +2,6 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 import requests
 import json
-import requests
-import json
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 import datetime
@@ -15,13 +13,13 @@ from itertools import chain
 from django.http import HttpResponse, HttpResponseRedirect
 import csv
 
-
-completedCorrect = ""
-completedCorrects = ""
-completedCorrectss = ""
-completedCorrectsss = ""
-rejection = ""
-duplication = ""
+#global tbtd, tbd, tbttd
+tbtd = ""
+tbd = ""
+tbttd = ""
+completedThors = ""
+completedThorrs = ""
+completedThorrrs = ""
 completedWed = ""
 completedWedd = ""
 completedWeddd = ""
@@ -31,9 +29,6 @@ comptuesd = ""
 comptuee = ""
 comptuesdd = ""
 comptuess = ""
-completedThorrrs = ""
-completedThorrs = ""
-completedThors = ""
 completedWedo = ""
 completedWeddo = ""
 completedWedddo = ""
@@ -46,9 +41,6 @@ completedWebbbDo = ""
 completedMonm = ""
 completedMonmm = ""
 completedMonmmm = ""
-completedMonmm = ""
-completedMonmmm = ""
-completedMonmmmm = ""
 coomptue = ""
 cooomptues = ""
 cooomptuesd = ""
@@ -70,53 +62,6 @@ completedWEBBBDO = ""
 cWEBBBDO = ""
 cWEBDO = ""
 cWEBBDO = ""
-mmm = ""
-mm = ""
-m = ""
-#global tb, tbt, tbtt
-tb = ""
-tbt = ""
-tbtt = ""
-#global tbd, tbtd, tbttd
-tbd = ""
-tbtd = ""
-tbttd = ""
-#global mrf, mcf, mdf
-mrf = ""
-mcf = ""
-mdf = ""
-mrff = ""
-mcff = ""
-mdff = ""
-##
-#global mrff, mcff, mdff
-mrffd = ""
-mcffd = ""
-mdffd = ""
-#
-mrffddf = ""
-mcffddf = ""
-mdffddf = ""
-#global mrffdf, mcffdf, mdffdf
-mrffdfp = ""
-mcffdfp = ""
-mdffdfp = ""
-#global trf, tcf, tdf
-tdf = ""
-trf = ""
-tcf = ""
-trfd = ""
-tdfd = ""
-tcfd = ""
-#
-trf2 = ""
-tdf2 = ""
-tcf2 = ""
-trf2 = ""
-successdate = ""
-rejectdate = "" 
-rejectdup = ""
-
 
 def login(request):
     if request.method == 'POST':
@@ -138,9 +83,19 @@ def home(request):
     except:
         print("Session Not found")
         return render(request, 'home2.html')
-    summary = 'https://tap2eat.co.ke/pilot/api/v1/report/summary'       
-    response2 = requests.get(summary, headers={'Authorization': f'Bearer {token}'})
-    #print(response2.json())
+    newDateFeature = datetime.datetime.now()
+    newDateFeatureYesterday = newDateFeature - timedelta(1)
+    yesterdaysstartdate = str(newDateFeatureYesterday.date())
+    newstartdate = str(newDateFeature.date())
+    today12pm = newDateFeature.replace(hour=12, minute=30, second=0, microsecond=0)
+    if newDateFeature < today12pm:
+        newDateFormat = '?startDate='+ yesterdaysstartdate + '_00:00&endDate=' + yesterdaysstartdate + '_23:59'
+        print("Showing yesterdays Summary Endpoint as it is not yet 12:30 pm")
+    else:
+        newDateFormat = '?startDate='+ newstartdate + '_00:00&endDate=' + newstartdate + '_23:59'
+        print("Showing current Day Summary endpoint as 12:30 pm has reached!")
+    summary = 'https://tap2eat.co.ke/pilot/api/v1/report/summary' 
+    response2 = requests.get('https://tap2eat.co.ke/pilot/api/v1/report/summary'+newDateFormat, headers={'Authorization': f'Bearer {token}'})
     paymentsApi = 'https://tap2eat.co.ke/pilot/api/v1/payments'
     info = '?pgSize=40&pgNum=0&sortOrder=asc'
     response3 = requests.get(paymentsApi + info, headers={'Authorization': f'Bearer {token}'})
@@ -148,6 +103,7 @@ def home(request):
         if response3.status_code == 200 and 'user' in request.session:
             current_user = request.session['user']
             data5 = response2.json()
+            #print(data5)
             todoss = data5['content']
             usera =  todoss.get('devices', 0)
             data = {
@@ -156,6 +112,12 @@ def home(request):
             a = data['devices']#['nfc_tag']
             activee = (a.get('nfc_tag', None)) #
             tagg = (activee)
+            ###########################################
+            ###Amount Collected
+            moneyCollected = todoss.get('transactions')
+            for moneey in moneyCollected:
+                if moneey['transactionType'] == 'acc_credit':
+                    money = int(moneey['totalAmount'])
             #############################################################################
             #################Total Registered Users
             totalRegisteredUsers = data5['content']
@@ -190,28 +152,15 @@ def home(request):
             }
             aa = data7['mealTaps']
             ##print(aa)
-            global completedCorrect
-            global rejection
-            global duplication
             for items in aa:
-                ##print(items)
                 correct = items.get('status', 0)
                 if correct == 'complete':
                     completedCorrect = items['count']
-                    ##print("Current Day Complete taps ", completedCorrect)
-            for itemso in aa:
-                corre = itemso.get('status', 0)
-                if corre == 'rejected':
-                    rejection = itemso['count']
-                    ##print("Current Day Rejections: ", rejection)
-            for itemsoi in aa:
-                corra = itemsoi.get('status', 0)
-                if corra == 'duplicate':
-                    duplication = itemsoi['count']
-                    ##print("Current Day Duplication: " ,duplication)              
+                if correct == 'rejected':
+                    rejection = items['count']
+                if correct == 'duplicate':
+                    duplication = items['count']             
             ######################################################################################
-            #data5 is a json
-            #project = data5['content']['nextDayProjection']
             project = data5['content']
             nextmeal = project.get('nextDayProjection', None)
             nextmealProjection = int(nextmeal or 0)
@@ -235,24 +184,14 @@ def home(request):
             rawData = currentDayTaps.json()
             contentdata = rawData['content']
             contentdata1 = contentdata.get('mealTaps', 0)
-            ##print(contentdata1)
-            global completedCorrects
-            global completedCorrectss
-            global completedCorrectsss
             for item in contentdata1:
                 corrects = item.get('status', 1)
                 if corrects == 'complete':
                     completedCorrects = item['count']
-
-            for itemi in contentdata1:
-                correctss = itemi.get('status', 0)
-                if correctss == 'rejected':
-                    completedCorrectss = itemi['count']
-
-            for itemsi in contentdata1:
-                correctsss = itemsi.get('status', 0)
-                if correctsss == 'duplicate':
-                    completedCorrectsss = itemsi['count']            
+                if corrects == 'rejected':
+                    completedCorrectss = item['count']
+                if corrects == 'duplicate':
+                    completedCorrectsss = item['count']               
             #previous day taps        
             previousDayTaps = completedCorrects
             ########################################################################################
@@ -273,18 +212,11 @@ def home(request):
                 for tapses in rawMondTM:
                     rawdD = tapses.get('status', None)
                     if rawdD == 'complete':
-                        completedMonm = tapses['count'] #Monday taps success
-                        ##print("CompletedTaps Monday:", completedMonm)
-                for tapsess in rawMondTM:
-                    rawdDf = tapsess.get('status', None)
-                    if rawdDf == 'rejected':
-                        completedMonmm = tapsess['count'] #wednesday taps rejected
-                        ##print("RejectedTaps Monday:", completedMonmm)
-                for tapsesss in rawMondTM:
-                    rawdFG = tapsesss.get('status', None)
-                    if rawdFG == 'duplicate':
-                        completedMonmmm = tapsesss['count'] #wednesday taps duplicate
-                        ##print("DuplicateTaps Monday:", completedMonmmm)
+                        completedMonm = tapses['count']
+                    if rawdD == 'rejected':
+                        completedMonmm = tapses['count']
+                    if rawdD == 'duplicate':
+                        completedMonmmm = tapses['count']        
                 ###########################################
             elif leo == 'Tuesday':
                 startDateTues = str(day.date())
@@ -301,17 +233,11 @@ def home(request):
                 for tups in rawTueTM:
                     rawdDD = tups.get('status', 0)
                     if rawdDD == 'complete':
-                        cm = tups['count'] #Monday taps success
-                        ##print(completedWed)
-                for tupps in rawTueTM:
-                    rawdDff = tupps.get('status', 0)
-                    if rawdDff == 'rejected':
-                        cmmm = tupps['count'] #wednesday taps rejected
-                for tuppps in rawTueTM:
-                    rawdFGG = tuppps.get('status', 0)
-                    if rawdFGG == 'duplicate':
-                        cmmmm = tuppps['count'] #wednesday taps duplicate
-                ##
+                        cm = tups['count']
+                    if rawdDD == 'rejected':
+                        cmmm = tups['count']
+                    if rawdDD == 'duplicate':
+                        cmmmm = tups['count']        
                 #####Get subsequent request for Monday now
                 MonEndD = day - timedelta(1)
                 MonStartD = day - timedelta(1)
@@ -329,7 +255,6 @@ def home(request):
                     ruwwwTue = tops.get('status', 0)
                     if ruwwwTue == 'complete':
                         coomptue = tops['count']
-                        ##print("vdfsdbsdgsdfgbsdb",coomptue)
                 for topps in rawMOO:
                     riwwTue = topps.get('status', 0)
                     if riwwTue == 'rejected':
@@ -430,20 +355,15 @@ def home(request):
                 dataThur = requestThursday.json()
                 rawThur = dataThur['content']
                 rawThursd = rawThur.get('mealTaps', 0)
-                ##print(rawThursd)
                 global completedThors, completedThorrs, completedThorrrs
                 for tapps in rawThursd:
                     rawThor = tapps.get('status', 0)
                     if rawThor == 'complete':
-                        completedThors = tapps['count'] #Thursday Taps
-                for tappsi in rawThursd:
-                    rawThorr = tappsi.get('status', 0)
-                    if rawThorr == 'rejected':
-                        completedThorrs = tappsi['count']
-                for tappo in rawThursd:
-                    rawThorrr = tappo.get('status', 0)
-                    if rawThorrr == 'duplicate':
-                        completedThorrrs = tappo['count']
+                        completedThors = tapps['count']
+                    if rawThor == 'rejected':
+                        completedThorrs = tapps['count']
+                    if rawThor == 'duplicate':
+                        completedThorrrs = tapps['count']       
                 #Wednesday Taps on Thursday
                 weddoStart = day - timedelta(1)
                 weddoEnd = day - timedelta(1)
@@ -459,14 +379,10 @@ def home(request):
                     raweddd = taspis.get('status', 0)
                     if raweddd == 'complete':
                         completedWedo = taspis['count']
-                for tadpis in rawWednesday:
-                    raeddd = tadpis.get('status', 0)
-                    if raeddd == 'rejected':
-                        completedWeddo = tadpis['count']
-                for tabpis in rawWednesday:
-                    rraWeddd = tabpis.get('status', 0)
-                    if rraWeddd == 'duplicate':
-                        completedWed = tabpis['count']
+                    if raweddd == 'rejected':
+                        completedWeddo = taspis['count']
+                    if raweddd == 'duplicate':
+                        completedWed = taspis['count']
                         #######################################################################################
                 #Tuesday Taps on Thursday
                 tuStart = day - timedelta(2)
@@ -695,7 +611,7 @@ def home(request):
             if request.method == 'POST' and 'btnform1' in request.POST:
                 dayEntered = (request.POST['btnform1'])
                 todaytoday = day.today().strftime('%A')
-                print(todaytoday)
+                #print(todaytoday)
                 if todaytoday == 'Thursday':
                     #getDayEnteredOnForm = dayEntered
                     mondayday = day - timedelta(3)
@@ -710,22 +626,21 @@ def home(request):
                         stdate = str(mondayday.date())
                         timeFormatDay = '?startDate='+ stdate + '_00:00&endDate=' + stdate + '_23:59'
                         requestMondayFormat = requests.get(summary + timeFormatDay, headers={'Authorization': f'Bearer {token}'})
-                        print("TESTING:", requestMondayFormat)
+                        #print("TESTING:", requestMondayFormat)
                         rawResponseMonday = requestMondayFormat.json()
                         cleanedMonday = rawResponseMonday['content']
                         usela =  cleanedMonday.get('mealTaps', None)
-                        global m, mm, mmm
                         for monddd in usela:
                             mddd = monddd.get('status', None)
                             if mddd == 'complete':
                                 m = monddd['count']
-                                print("COMPLETED MONDAY", m)
+                                #print("COMPLETED MONDAY", m)
                             if mddd == 'rejected':
                                 mm = monddd['count']
-                                print("Rejected MONDAY", mm)
+                                #print("Rejected MONDAY", mm)
                             if mddd == 'duplicate':
                                 mmm = monddd['count']
-                                print("Duplicated MONDAY", mmm)
+                                #print("Duplicated MONDAY", mmm)
                         #missed meals
                         missedMealsMonday = rawResponseMonday['content']
                         missedMealsMon =  missedMealsMonday.get('endOfDay', None)
@@ -750,7 +665,13 @@ def home(request):
                         nfcc = dataRaw['devicesc']#['nfc_tag']
                         activeeTagg = (nfcc.get('nfc_tag', None)) #
                         taggMon = (activeeTagg)
+                        ##Money Collected
+                        getMoney = nextMl.get('transactions')
+                        for getit in getMoney:
+                            if getit['transactionType'] == 'acc_credit':
+                                moneyT = int(getit['totalAmount'])
                         data23 = {
+                            "moneyCollected":moneyT,
                             'current_user':current_user,
                             "theDate":theDateM,
                             "theMonth":theMonthM,
@@ -832,7 +753,6 @@ def home(request):
                         rawResponseTuesday = requestTuesdayFormat.json()
                         cleanedTuesday = rawResponseTuesday['content']
                         usella =  cleanedTuesday.get('mealTaps', None)
-                        global tb, tbt, tbtt
                         for tueddd in usella:
                             tddd = tueddd.get('status', None)
                             if tddd == 'complete':
@@ -864,7 +784,13 @@ def home(request):
                         nfccd = dataRawTuesday['devicescd']#['nfc_tag']
                         activeeTaggss = (nfccd.get('nfc_tag', None)) #
                         taggTue = (activeeTaggss)
+                         ##Money Collected
+                        getMoney1 = cleanedTuesday.get('transactions')
+                        for getit1 in getMoney1:
+                            if getit1['transactionType'] == 'acc_credit':
+                                moneyT1 = int(getit1['totalAmount'])
                         data233 = {
+                            "moneyCollected":moneyT1,
                             'current_user':current_user,
                             "theDate":theDateT,
                             "theMonth":theMonthT,
@@ -946,7 +872,7 @@ def home(request):
                         rawResponseWednesday = requestWednesdayFormat.json()
                         cleanedWednesday = rawResponseWednesday['content']
                         usellla =  cleanedWednesday.get('mealTaps', None)
-                        global tbd, tbtd, tbttd
+                        global tbtd, tbd, tbttd
                         for wedl in usellla:
                             wtddd = wedl.get('status', None)
                             if wtddd == 'complete':
@@ -978,7 +904,13 @@ def home(request):
                         nfccdd = dataRawWednesday['devicescdd']#['nfc_tag']
                         activeeTaggssd = (nfccdd.get('nfc_tag', None)) #
                         taggWed = (activeeTaggssd)
+                         ##Money Collected
+                        getMoney2 = cleanedWednesday.get('transactions')
+                        for getit2 in getMoney2:
+                            if getit2['transactionType'] == 'acc_credit':
+                                moneyT2 = int(getit2['totalAmount'])
                         data2334 = {
+                            "moneyCollected":moneyT2,
                             'current_user':current_user,
                             "theDate":theDateW,
                             "theMonth":theMonthW,
@@ -1067,7 +999,6 @@ def home(request):
                         rawResponseMondayFri = requestMondayFormatFri.json()
                         cleanedMondayFri = rawResponseMondayFri['content']
                         uselda =  cleanedMondayFri.get('mealTaps', None)
-                        global mrf, mcf, mdf
                         for monfriddd in uselda:
                             mfddd = monfriddd.get('status', None)
                             if mfddd == 'complete':
@@ -1102,7 +1033,13 @@ def home(request):
                         activeeTaggw = (nfccq.get('nfc_tag', None)) #
                         taggMonFri = (activeeTaggw)
                         #print(taggMonFri)
+                         ##Money Collected
+                        getMoney3 = cleanedMondayFri.get('transactions')
+                        for getit3 in getMoney3:
+                            if getit3['transactionType'] == 'acc_credit':
+                                moneyT3 = int(getit3['totalAmount'])
                         data23345 = {
+                            "moneyCollected":moneyT3,
                             'current_user':current_user,
                             "theDate":theDateMT,
                             "theMonth":theMonthMT,
@@ -1184,7 +1121,6 @@ def home(request):
                         rawResponseTuesdayFri = requestTuesdayFormatFri.json()
                         cleanedTuesdayFri = rawResponseTuesdayFri['content']
                         useldad =  cleanedTuesdayFri.get('mealTaps', None)
-                        global mrff, mcff, mdff
                         for friddd in useldad:
                             tfddd = friddd.get('status', None)
                             if tfddd == 'complete':
@@ -1218,7 +1154,13 @@ def home(request):
                         nfccqf = dataRawgf['devicescgf']#['nfc_tag']
                         activeeTaggwf = (nfccqf.get('nfc_tag', None)) #
                         taggTueFri = (activeeTaggwf)
+                         ##Money Collected
+                        getMoney4 = cleanedTuesdayFri.get('transactions')
+                        for getit4 in getMoney4:
+                            if getit4['transactionType'] == 'acc_credit':
+                                moneyT4 = int(getit4['totalAmount'])
                         data235 = {
+                            "moneyCollected":moneyT4,
                             'current_user':current_user,
                             "theDate":theDateTT,
                             "theMonth":theMonthTT,
@@ -1300,7 +1242,6 @@ def home(request):
                         rawResponseWednesdayFri = requestWednesdayFormatFri.json()
                         cleanedWednesdayFri = rawResponseWednesdayFri['content']
                         useldadf =  cleanedWednesdayFri.get('mealTaps', None)
-                        global mrffd, mcffd, mdffd
                         for riddd in useldadf:
                             tdfddd = riddd.get('status', None)
                             if tdfddd == 'complete':
@@ -1334,7 +1275,13 @@ def home(request):
                         nfccqfd = dataRawgfd['devicescgfd']#['nfc_tag']
                         activeeTaggwfd = (nfccqfd.get('nfc_tag', None)) #
                         taggWedFri = (activeeTaggwfd)
+                         ##Money Collected
+                        getMoney5 = cleanedWednesdayFri.get('transactions')
+                        for getit5 in getMoney5:
+                            if getit5['transactionType'] == 'acc_credit':
+                                moneyT5 = int(getit5['totalAmount'])
                         data2356 = {
+                            "moneyCollected":moneyT5,
                             'current_user':current_user,
                             "theDate":DateTT,
                             "theMonth":MonthTT,
@@ -1416,7 +1363,6 @@ def home(request):
                         rawResponseThursdayFri = requestThursdayFormatFri.json()
                         cleanedThursdayFri = rawResponseThursdayFri['content']
                         useldadfft =  cleanedThursdayFri.get('mealTaps', None)
-                        global mrffdfp, mcffdfp, mdffdfp
                         for idd in useldadfft:
                             dfdddg = idd.get('status', 0)
                             if dfdddg == 'complete':
@@ -1450,7 +1396,13 @@ def home(request):
                         nfccqfd4 = dataRawgfd4['devicescgfd4']#['nfc_tag']
                         activeeTaggwfd4 = (nfccqfd4.get('nfc_tag', None)) #
                         taggThurFri = (activeeTaggwfd4)
+                         ##Money Collected
+                        getMoney6 = cleanedThursdayFri.get('transactions')
+                        for getit6 in getMoney6:
+                            if getit6['transactionType'] == 'acc_credit':
+                                moneyT6 = int(getit6['totalAmount'])
                         data23567 = {
+                            "moneyCollected":moneyT6,
                             'current_user':current_user,
                             "theDate":ateTT,
                             "theMonth":onthTT,
@@ -1536,7 +1488,6 @@ def home(request):
                         rawResponseMondayWED = requestMondayFormatM.json()
                         cleanedMondayWED = rawResponseMondayWED['content']
                         selda =  cleanedMondayWED.get('mealTaps', None)
-                        global trf, tcf, tdf
                         for monwed in selda:
                             mfdddu = monwed.get('status', None)
                             if mfdddu == 'complete':
@@ -1570,7 +1521,13 @@ def home(request):
                         nfccq21 = dataRawg19['devicescg9']#['nfc_tag']
                         activeeTaggw19 = (nfccq21.get('nfc_tag', None)) #
                         taggMonWEDO = (activeeTaggw19)
+                         ##Money Collected
+                        getMoney7 = cleanedMondayWED.get('transactions')
+                        for getit7 in getMoney7:
+                            if getit7['transactionType'] == 'acc_credit':
+                                moneyT7 = int(getit7['totalAmount'])
                         data235678 = {
+                            "moneyCollected":moneyT7,
                             'current_user':current_user,
                             "theDate":tDateMT,
                             "theMonth":tMonthMT,
@@ -1652,7 +1609,6 @@ def home(request):
                         rawResponseMondayTU = requestMondayFormatT.json()
                         cleanedMondayTUE = rawResponseMondayTU['content']
                         seldad =  cleanedMondayTUE.get('mealTaps', None)
-                        global trfd, tcfd, tdfd
                         for monTUE in seldad:
                             mfddduf = monTUE.get('status', None)
                             if mfddduf == 'complete':
@@ -1686,7 +1642,13 @@ def home(request):
                         nfccq219 = dataRawg199['devicescg99']#['nfc_tag']
                         activeeTaggw199 = (nfccq219.get('nfc_tag', None)) #
                         taggMonTUE = (activeeTaggw199)
+                         ##Money Collected
+                        getMoney8 = cleanedMondayTUE.get('transactions')
+                        for getit8 in getMoney8:
+                            if getit8['transactionType'] == 'acc_credit':
+                                moneyT8 = int(getit8['totalAmount'])
                         data2356789 = {
+                            "moneyCollected":moneyT8,
                             'current_user':current_user,
                             "theDate":DateMT,
                             "theMonth":MonthMT,
@@ -1771,7 +1733,6 @@ def home(request):
                         rawResponseMondayMM = requestMondayFormatTT.json()
                         cleanedMondayMON = rawResponseMondayMM['content']
                         seldom =  cleanedMondayMON.get('mealTaps', None)
-                        global trf2, tcf2, tdf2
                         for monwe in seldom:
                             mfdddus = monwe.get('status', None)
                             if mfdddus == 'complete':
@@ -1795,8 +1756,6 @@ def home(request):
                         #next meal projections
                         nextmeal1230P = cleanedMondayMON.get('nextDayProjection', None)
                         nextmealProjection1230P = int(nextmeal1230P or 0)
-                        #tag new issues
-                        #todoss = data5['content']
                         tagNewIssuesWEDOP = cleanedMondayMON.get('devices', None)
                         ##print(usera)
                         dataRawg19P = {
@@ -1805,7 +1764,13 @@ def home(request):
                         nfccq21P = dataRawg19P['devicescg9P']#['nfc_tag']
                         activeeTaggw19P = (nfccq21P.get('nfc_tag', None)) #
                         taggMonWEDOP = (activeeTaggw19P)
+                         ##Money Collected
+                        getMoney9 = cleanedMondayMON.get('transactions')
+                        for getit9 in getMoney9:
+                            if getit9['transactionType'] == 'acc_credit':
+                                moneyT9 = int(getit9['totalAmount'])
                         data2356789P = {
+                            "moneyCollected":moneyT9,
                             'current_user':current_user,
                             "theDate":tDateMTF,
                             "theMonth":tMonthMTF,
@@ -1878,9 +1843,6 @@ def home(request):
             if request.method == 'POST' and 'btnform2' in request.POST:
                 startdateentered = (request.POST['start'])
                 enddateentered = (request.POST['end'])
-                print(startdateentered)#2021-03-04
-                print((enddateentered))#2021-03-05
-                #get the day the date the month and the year
                 dateeee = startdateentered[-2:]
                 monthth = startdateentered[-5]
                 monththh = startdateentered[-4]
@@ -1892,7 +1854,6 @@ def home(request):
                 rawdatetime = datetimesett.json()
                 cleaneddatetime = rawdatetime['content']
                 datetimemealtaps =  cleaneddatetime.get('mealTaps', None)
-                global successdate, rejectdate, rejectdup
                 for monwe11 in datetimemealtaps:
                     mfdddus11 = monwe11.get('status', None)
                     if mfdddus11 == 'complete':
@@ -1925,7 +1886,12 @@ def home(request):
                 nfccq21P12 = dataRawg19P111['devicescg9P111']#['nfc_tag']
                 activeeTaggw19P21 = (nfccq21P12.get('nfc_tag', None)) #
                 taggMonDate = (activeeTaggw19P21)
+                finalMoney = cleaneddatetime.get('transactions')
+                for getget in finalMoney:
+                    if getget['transactionType'] == 'acc_credit':
+                        moneyfinal = int(getget['totalAmount'])
                 data2av = {
+                    "moneyCollected":moneyfinal,
                     'current_user':current_user,
                     "theDay":theDay,
                     "theDate":dateeee,
@@ -1997,6 +1963,7 @@ def home(request):
                 return render(request, "home.html",  data2av)    
         #####################################################################################
             data2 = {
+                "moneyCollected":money,
                 'current_user':current_user,
                 "theDay":theDay,
                 "theDate":theDate,
@@ -2150,6 +2117,7 @@ def usertable2(request):
             found = searchRequest.json()
             found1 = found['content']
             found2 = found1.get('data', None)
+            ##print(found2)
             paginatedSearch = Paginator(found2, 5)
             pageSearch = request.GET.get('page', 1)
             pgSearch = paginatedSearch.page(pageSearch)
@@ -2246,9 +2214,16 @@ def dailyreports(request):
     return response       
 
 def createuser(request):
+    try:
+        token = request.session['access_token']
+    except:
+        return render(request, "home2.html")
     username = request.session['user']
     if username == 'system.admin@tap2eat.co.ke':
         #do something
+        context = {
+            "current_user":username,
+        }
         try:
             token = request.session['access_token']
         except:
@@ -2259,16 +2234,15 @@ def createuser(request):
             lastname = (request.POST['last_name'])
             username = (request.POST['phonenumber'])
             password = (request.POST['psw'])
+            email = (request.POST['email'])
             roleid = (request.POST['role'])
             roleidd = int(roleid)
-            #password = (request.POST['psw'])
-            #Make a POST request
             data = {
                 'firstName':firstname,
                 'lastName':lastname,
                 'roleId':roleidd,
                 'profile':{'passcode':password},
-                'contacts':[{'typeId':1, 'value':username}],
+                'contacts':[{'typeId':1, 'value':username},{'typeId':2, 'value':email}],
             }
             #print(data)
             response2 = requests.post("https://tap2eat.co.ke/pilot/api/v1/user", json=data ,headers={'Authorization': f'Bearer {token}'})
@@ -2276,11 +2250,11 @@ def createuser(request):
             if response2.status_code == 200:
                 return redirect('/home')
             else:
-                return HttpResponse("Not Created")
+                return HttpResponse("User Created")
     else:
         return HttpResponse("Not Allowed")
 
-    return render(request, 'createuser.html')
+    return render(request, 'createuser.html', context)
 
 #MPESA Payments View
 def mpesa(request):
