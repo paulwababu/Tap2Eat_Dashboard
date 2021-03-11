@@ -262,10 +262,10 @@ MIDDLEWARE = (
 #Add the following lines to settings.py
 # Content Security Policy
 CSP_DEFAULT_SRC = ("'none'", )
-CSP_STYLE_SRC = ("'self'", 'https://paulkiragu621.github.io', 'https://image.freepik.com', 'https://img.icons8.com')
-CSP_SCRIPT_SRC = ("'self'", 'https://paulkiragu621.github.io', 'ajax.googleapis.com', 'https://image.freepik.com', 'https://img.icons8.com')
-CSP_IMG_SRC = ("'self'", 'https://paulkiragu621.github.io', 'https://image.freepik.com', 'https://img.icons8.com')
-CSP_FONT_SRC = ("'self'", 'https://paulkiragu621.github.io', 'https://image.freepik.com', 'https://img.icons8.com')
+CSP_STYLE_SRC = ("'self'", 'paulkiragu621.github.io', 'image.freepik.com', 'img.icons8.com')
+CSP_SCRIPT_SRC = ("'self'", 'paulkiragu621.github.io', 'ajax.googleapis.com', 'image.freepik.com', 'https://img.icons8.com')
+CSP_IMG_SRC = ("'self'", 'paulkiragu621.github.io', 'image.freepik.com', 'img.icons8.com')
+CSP_FONT_SRC = ("'self'", 'paulkiragu621.github.io', 'image.freepik.com', 'img.icons8.com')
 CSP_INCLUDE_NONCE_IN = ("script-src", "style-src")
 # Sneak Peak
 
