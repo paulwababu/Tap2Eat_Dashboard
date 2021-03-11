@@ -218,6 +218,55 @@ $ 30 4 1 * * sudo certbot renew --quiet
 
 ```
 ```
+# Security Features Enforced
+
+1. Cross site request forgery (CSRF) protection
+
+#Added these lines in settings.py(only do so when HTTPS is enforced)
+
+CSRF_COOKIE_SECURE = True #to avoid transmitting the CSRF cookie over HTTP accidentally.
+SESSION_COOKIE_SECURE = True #to avoid transmitting the session cookie over HTTP accidentally.
+
+2. Cross-site Scripting (XSS)
+
+#Added this lines to prevent injections from attackers
+
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+3. SSL Redirect
+
+#Added this line so force all HTTP traffic to HTTPS
+
+SECURE_SSL_REDIRECT = True
+
+4. HTTP Strict Transport Security
+
+#When this policy is set, browsers will refuse to connect to your site for the given time period if you’re not properly serving HTTPS resources, or if your certificate expires.
+
+SECURE_HSTS_SECONDS = 86400  # 1 day
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+5. Content Security Policy (CSP)
+
+#PIP INSTALL DJANGO-CSP
+#Edit your project’s settings module, to add the django-csp middleware to MIDDLEWARE, like so:
+
+MIDDLEWARE = (
+    # ...
+    'csp.middleware.CSPMiddleware',
+    # ...
+)
+
+#Add the following lines to settings.py
+# Content Security Policy
+CSP_DEFAULT_SRC = ("'none'", )
+CSP_STYLE_SRC = ("'self'", 'https://paulkiragu621.github.io', 'https://image.freepik.com', 'https://img.icons8.com')
+CSP_SCRIPT_SRC = ("'self'", 'https://paulkiragu621.github.io', 'ajax.googleapis.com', 'https://image.freepik.com', 'https://img.icons8.com')
+CSP_IMG_SRC = ("'self'", 'https://paulkiragu621.github.io', 'https://image.freepik.com', 'https://img.icons8.com')
+CSP_FONT_SRC = ("'self'", 'https://paulkiragu621.github.io', 'https://image.freepik.com', 'https://img.icons8.com')
+CSP_INCLUDE_NONCE_IN = ("script-src", "style-src")
 # Sneak Peak
 
 ![security](https://user-images.githubusercontent.com/44939805/110807036-af6ea700-8293-11eb-970d-f293ec2fe16d.png)
