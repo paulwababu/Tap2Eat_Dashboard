@@ -13,6 +13,11 @@ from itertools import chain
 from django.http import HttpResponse, HttpResponseRedirect
 import csv
 
+
+#global mrfff, mcffd, mdffd
+mrfff = ""
+mcffd = ""
+mdffd = ""
 #global tbtd, tbd, tbttd
 tbtd = ""
 tbd = ""
@@ -525,6 +530,7 @@ def home(request):
                     dedddrDD = tgpy.get('status', 0)
                     if dedddrDD == 'rejected':
                         completedWEBBDO = tgpy['count']
+                        print(completedWEBBDO)
                 for tgpyd in rawTDD:
                     deredbDD = tgpyd.get('status', 0)
                     if deredbDD == 'duplicate':
@@ -1242,6 +1248,7 @@ def home(request):
                         rawResponseWednesdayFri = requestWednesdayFormatFri.json()
                         cleanedWednesdayFri = rawResponseWednesdayFri['content']
                         useldadf =  cleanedWednesdayFri.get('mealTaps', None)
+                        global mrfff, mcffd, mdffd
                         for riddd in useldadf:
                             tdfddd = riddd.get('status', None)
                             if tdfddd == 'complete':
