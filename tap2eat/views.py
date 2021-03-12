@@ -13,7 +13,9 @@ from itertools import chain
 from django.http import HttpResponse, HttpResponseRedirect
 import csv
 
-
+completedCorrect = ""
+rejection = ""
+duplication = ""
 #global mrfff, mcffd, mdffd
 mrfff = ""
 mcffd = ""
@@ -157,6 +159,7 @@ def home(request):
             }
             aa = data7['mealTaps']
             ##print(aa)
+            global completedCorrect, rejection, duplication
             for items in aa:
                 correct = items.get('status', 0)
                 if correct == 'complete':
