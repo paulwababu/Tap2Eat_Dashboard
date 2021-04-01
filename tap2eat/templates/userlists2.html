@@ -1,4 +1,3 @@
-{% load static %}
 {% load cache %}
 <!doctype html>
 <html lang="en">
@@ -8,13 +7,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://paulkiragu621.github.io/staticFiles/assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}">
     <link rel="shortcut icon" href="https://image.freepik.com/free-vector/corn-cobs-realistic_1284-14091.jpg" type="image/x-icon">
-    <link href="https://paulkiragu621.github.io/staticFiles/assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://paulkiragu621.github.io/staticFiles/assets/libs/css/style.css">
-    <link rel="stylesheet" href="https://paulkiragu621.github.io/staticFiles/assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
-    <link rel="stylesheet" href="https://paulkiragu621.github.io/staticFiles/assets/vendor/fonts/material-design-iconic-font/css/materialdesignicons.min.css">
-    <link rel="stylesheet" href="https://paulkiragu621.github.io/staticFiles/assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
+    <link href="{% static 'assets/vendor/fonts/circular-std/style.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'assets/libs/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendor/fonts/fontawesome/css/fontawesome-all.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendor/fonts/material-design-iconic-font/css/materialdesignicons.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendor/fonts/flag-icon-css/flag-icon.min.css' %}">
     <title> Tap2Eat - Feeding The Future</title>
 </head>
 
@@ -43,7 +42,7 @@
                                         <div class="list-group">
                                             <a href="#" class="list-group-item list-group-item-action active">
                                                 <div class="notification-info">
-                                                    <div class="notification-list-user-img"><img src="{% static 'assets/images/avatar-2.jpg' %}" alt="" class="user-avatar-md rounded-circle"></div>
+                                                    <div class="notification-list-user-img"><img src="#" alt="" class="user-avatar-md rounded-circle"></div>
                                                     <div class="notification-list-user-block"><span class="notification-list-user-name">Jeremy Rakestraw</span>accepted your invitation to join the team.
                                                         <div class="notification-date">2 min ago</div>
                                                     </div>
@@ -51,7 +50,7 @@
                                             </a>
                                             <a href="#" class="list-group-item list-group-item-action">
                                                 <div class="notification-info">
-                                                    <div class="notification-list-user-img"><img src="{% static 'assets/images/avatar-3.jpg' %}" alt="" class="user-avatar-md rounded-circle"></div>
+                                                    <div class="notification-list-user-img"><img src="#" alt="" class="user-avatar-md rounded-circle"></div>
                                                     <div class="notification-list-user-block"><span class="notification-list-user-name">John Abraham </span>is now following you
                                                         <div class="notification-date">2 days ago</div>
                                                     </div>
@@ -59,7 +58,7 @@
                                             </a>
                                             <a href="#" class="list-group-item list-group-item-action">
                                                 <div class="notification-info">
-                                                    <div class="notification-list-user-img"><img src="{% static 'assets/images/avatar-4.jpg' %}" alt="" class="user-avatar-md rounded-circle"></div>
+                                                    <div class="notification-list-user-img"><img src="#" alt="" class="user-avatar-md rounded-circle"></div>
                                                     <div class="notification-list-user-block"><span class="notification-list-user-name">Monaan Pechi</span> is watching your main repository
                                                         <div class="notification-date">2 min ago</div>
                                                     </div>
@@ -67,7 +66,7 @@
                                             </a>
                                             <a href="#" class="list-group-item list-group-item-action">
                                                 <div class="notification-info">
-                                                    <div class="notification-list-user-img"><img src="{% static 'assets/images/avatar-5.jpg' %}" alt="" class="user-avatar-md rounded-circle"></div>
+                                                    <div class="notification-list-user-img"><img src="#" alt="" class="user-avatar-md rounded-circle"></div>
                                                     <div class="notification-list-user-block"><span class="notification-list-user-name">Jessica Caruso</span>accepted your invitation to join the team.
                                                         <div class="notification-date">2 min ago</div>
                                                     </div>
@@ -421,13 +420,13 @@
     <!-- ============================================================== -->
     <!-- Optional JavaScript -->
     <!-- jquery 3.3.1 -->
-    <script src="https://paulkiragu621.github.io/staticFiles/assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+    <script src="{% static 'assets/vendor/jquery/jquery-3.3.1.min.js' %}"></script>
     <!-- bootstap bundle js -->
-    <script src="https://paulkiragu621.github.io/staticFiles/assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
+    <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.js' %}"></script>
     <!-- slimscroll js -->
-    <script src="https://paulkiragu621.github.io/staticFiles/assets/vendor/slimscroll/jquery.slimscroll.js"></script>
+    <script src="{% static 'assets/vendor/slimscroll/jquery.slimscroll.js' %}"></script>
     <!-- main js -->
-    <script src="https://paulkiragu621.github.io/staticFiles/assets/libs/js/main-js.js"></script>
+    <script src="{% static 'assets/libs/js/main-js.js' %}"></script>
 </body>
  
 </html>
