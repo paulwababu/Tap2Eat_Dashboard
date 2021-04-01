@@ -138,8 +138,10 @@ SECURE_HSTS_PRELOAD = True
 
 #
 # Content Security Policy
-CSP_DEFAULT_SRC = ("'none'", )
-CSP_BASE_URI = ("'none'", )
+CSP_DEFAULT_SRC = ("'self'", )
+CSP_BASE_URI = ("'self'", )
+CSP_FRAME_ANCESTORS = ("'self'", )
+CSP_FORM_ACTION = ("'self'", )
 CSP_STYLE_SRC = ("'self'", 'paulkiragu621.github.io', 'image.freepik.com', 'img.icons8.com')
 CSP_SCRIPT_SRC = ("'self'", 'paulkiragu621.github.io', 'ajax.googleapis.com', 'image.freepik.com', 'img.icons8.com')
 CSP_IMG_SRC = ("'self'", 'paulkiragu621.github.io', 'image.freepik.com', 'img.icons8.com')
