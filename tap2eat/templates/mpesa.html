@@ -10,13 +10,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap core JavaScript-->
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://paulkiragu621.github.io/staticFiles/assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}">
     <link rel="shortcut icon" href="https://image.freepik.com/free-vector/corn-cobs-realistic_1284-14091.jpg" type="image/x-icon">
-    <link href="https://paulkiragu621.github.io/staticFiles/assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://paulkiragu621.github.io/staticFiles/assets/libs/css/style.css">
-    <link rel="stylesheet" href="https://paulkiragu621.github.io/staticFiles/assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
-    <link rel="stylesheet" href="https://paulkiragu621.github.io/staticFiles/assets/vendor/fonts/material-design-iconic-font/css/materialdesignicons.min.css">
-    <link rel="stylesheet" href="https://paulkiragu621.github.io/staticFiles/assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
+    <link href="{% static 'assets/vendor/fonts/circular-std/style.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'assets/libs/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendor/fonts/fontawesome/css/fontawesome-all.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendor/fonts/material-design-iconic-font/css/materialdesignicons.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendor/fonts/flag-icon-css/flag-icon.min.css' %}">
     <title> Tap2Eat - Feeding The Future</title>
 </head>
 <body>
@@ -292,7 +292,7 @@
                                                             <td>{{ cash.user.firstName }} {{ cash.user.lastName }}</td>
                                                             <td>{{ cash.user.refValue }}</td>
                                                             <td>{{ cash.mpesaReceiptNumber }}</td>
-                                                            <td>Ksh. {{ cash.amount|floatformat:"0" }/=}</td>
+                                                            <td>Ksh. {{ cash.amount|floatformat:"0" }}/=</td>
                                                             {% if cash.responseDescription == 'successful account topup' and cash.transactionType == 'acc_credit' %}
                                                             <td><span class="badge-dot badge-success mr-1"></span>Successful </td>
                                                             {% elif cash.responseDescription == 'successful account topup' and cash.transactionType == 'cash_acc_credit' %}
@@ -431,12 +431,12 @@
     </div>
     <!-- ============================================================== -->
     <!-- end main wrapper  -->
-    <script src="https://static.geekinsta.com/demo/table-with-search-and-sort/assets/jquery.min.js"></script>
+    <script src="https://static.geekinsta.com/demo/table-with-search-and-sort/assets/jquery.min.js' %}"></script>
     
     <!-- Page level plugin JavaScript-->
-    <script src="https://static.geekinsta.com/demo/table-with-search-and-sort/assets/jquery.datatables.min.js"></script>
+    <script src="https://static.geekinsta.com/demo/table-with-search-and-sort/assets/jquery.datatables.min.js' %}"></script>
 
-    <script src="https://static.geekinsta.com/demo/table-with-search-and-sort/assets/datatables.bootstrap4.min.js"></script>
+    <script src="https://static.geekinsta.com/demo/table-with-search-and-sort/assets/datatables.bootstrap4.min.js' %}"></script>
     <script>
         $(document).ready(function () {
             $('#dataTable').DataTable();
@@ -445,13 +445,13 @@
     <!-- ============================================================== -->
     <!-- Optional JavaScript -->
     <!-- jquery 3.3.1 -->
-    <script src="https://paulkiragu621.github.io/staticFiles/assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+    <script src="{% static 'assets/vendor/jquery/jquery-3.3.1.min.js' %}"></script>
     <!-- bootstap bundle js -->
-    <script src="https://paulkiragu621.github.io/staticFiles/assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
+    <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.js' %}"></script>
     <!-- slimscroll js -->
-    <script src="https://paulkiragu621.github.io/staticFiles/assets/vendor/slimscroll/jquery.slimscroll.js"></script>
+    <script src="{% static 'assets/vendor/slimscroll/jquery.slimscroll.js' %}"></script>
     <!-- main js -->
-    <script src="https://paulkiragu621.github.io/staticFiles/assets/libs/js/main-js.js"></script>
+    <script src="{% static 'assets/libs/js/main-js.js' %}"></script>
 </body>
  
 </html>
