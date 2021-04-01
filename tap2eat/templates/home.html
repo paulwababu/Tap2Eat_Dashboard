@@ -1,18 +1,17 @@
-{% load static %}
 <!doctype html>
 <html lang="en">
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://paulkiragu621.github.io/staticFiles/assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}">
     <link rel="shortcut icon" href="https://image.freepik.com/free-vector/corn-cobs-realistic_1284-14091.jpg" type="image/x-icon">
-    <link href="https://paulkiragu621.github.io/staticFiles/assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://paulkiragu621.github.io/staticFiles/assets/libs/css/style.css">
-    <link rel="stylesheet" href="https://paulkiragu621.github.io/staticFiles/assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
-    <link rel="stylesheet" href="https://paulkiragu621.github.io/staticFiles/assets/vendor/fonts/material-design-iconic-font/css/materialdesignicons.min.css">
-    <link rel="stylesheet" href="https://paulkiragu621.github.io/staticFiles/assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
-    <link rel="stylesheet" href="https://paulkiragu621.github.io/staticFiles/assets/vendor/charts/chartist-bundle/chartist.css">
+    <link href="{% static 'assets/vendor/fonts/circular-std/style.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'assets/libs/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendor/fonts/fontawesome/css/fontawesome-all.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendor/fonts/material-design-iconic-font/css/materialdesignicons.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendor/fonts/flag-icon-css/flag-icon.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendor/charts/chartist-bundle/chartist.css' %}">
     <title> Tap2Eat - Feeding The Future</title>
 </head>
 <body>
@@ -40,7 +39,7 @@
                                         <div class="list-group">
                                             <a href="#" class="list-group-item list-group-item-action active">
                                                 <div class="notification-info">
-                                                    <div class="notification-list-user-img"><img src="{% static 'assets/images/avatar-2.jpg' %}" alt="" class="user-avatar-md rounded-circle"></div>
+                                                    <div class="notification-list-user-img"><img src="#" alt="" class="user-avatar-md rounded-circle"></div>
                                                     <div class="notification-list-user-block"><span class="notification-list-user-name">Jeremy Rakestraw</span>accepted your invitation to join the team.
                                                         <div class="notification-date">2 min ago</div>
                                                     </div>
@@ -48,7 +47,7 @@
                                             </a>
                                             <a href="#" class="list-group-item list-group-item-action">
                                                 <div class="notification-info">
-                                                    <div class="notification-list-user-img"><img src="{% static 'assets/images/avatar-3.jpg' %}" alt="" class="user-avatar-md rounded-circle"></div>
+                                                    <div class="notification-list-user-img"><img src="#" alt="" class="user-avatar-md rounded-circle"></div>
                                                     <div class="notification-list-user-block"><span class="notification-list-user-name">John Abraham </span>is now following you
                                                         <div class="notification-date">2 days ago</div>
                                                     </div>
@@ -56,7 +55,7 @@
                                             </a>
                                             <a href="#" class="list-group-item list-group-item-action">
                                                 <div class="notification-info">
-                                                    <div class="notification-list-user-img"><img src="{% static 'assets/images/avatar-4.jpg' %}" alt="" class="user-avatar-md rounded-circle"></div>
+                                                    <div class="notification-list-user-img"><img src="#" alt="" class="user-avatar-md rounded-circle"></div>
                                                     <div class="notification-list-user-block"><span class="notification-list-user-name">Monaan Pechi</span> is watching your main repository
                                                         <div class="notification-date">2 min ago</div>
                                                     </div>
@@ -64,7 +63,7 @@
                                             </a>
                                             <a href="#" class="list-group-item list-group-item-action">
                                                 <div class="notification-info">
-                                                    <div class="notification-list-user-img"><img src="{% static 'assets/images/avatar-5.jpg' %}" alt="" class="user-avatar-md rounded-circle"></div>
+                                                    <div class="notification-list-user-img"><img src="#" alt="" class="user-avatar-md rounded-circle"></div>
                                                     <div class="notification-list-user-block"><span class="notification-list-user-name">Jessica Caruso</span>accepted your invitation to join the team.
                                                         <div class="notification-date">2 min ago</div>
                                                     </div>
@@ -439,21 +438,10 @@
                                     </div>
                                     <div class="col-sm-2 block">
                                         <div class="circle f">
-                                            
-                                            {% if completedCorrect == '' %}
-                                            <p><b>Collected Amount</b>
-                                                <br>
-                                                0
-                                            </p>
-                                            {% else %}
-                                            
                                             <p><b>Collected Amount</b>
                                                 <br>
                                                 Ksh. {{ moneyCollected|floatformat:"0" }}/=
                                             </p>
-                                            
-                                            {% endif %}
-                                            
                                         </div>
                                     </div>
                                 </div>
@@ -661,12 +649,12 @@
     <!-- jquery 3.3.1 -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- bootstap bundle js -->
-    <script src="https://paulkiragu621.github.io/staticFiles/assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
+    <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.js' %}"></script>
     <!-- slimscroll js -->
-    <script src="https://paulkiragu621.github.io/staticFiles/assets/vendor/slimscroll/jquery.slimscroll.js"></script>
+    <script src="{% static 'assets/vendor/slimscroll/jquery.slimscroll.js' %}"></script>
     <!-- main js -->
-    <script src="https://paulkiragu621.github.io/staticFiles/assets/libs/js/main-js.js"></script>
-    <script src="https://paulkiragu621.github.io/staticFiles/assets/vendor/charts/chartist-bundle/chartist.min.js"></script>
+    <script src="{% static 'assets/libs/js/main-js.js' %}"></script>
+    <script src="{% static 'assets/vendor/charts/chartist-bundle/chartist.min.js' %}"></script>
     {% if currentDay == 'Monday' %}
     <script nonce="{{request.csp_nonce}}">
         (function(window, document, $, undefined) {
